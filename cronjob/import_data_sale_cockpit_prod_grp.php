@@ -23,8 +23,8 @@ echo "\n\r" . date("Y/m/d", strtotime("yesterday"));
 
 $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CS08','CV07','DS07','IV07','CS03','CV03','DS03','IV03','CS02','CV02','DS02','IV02')) ";
 
-$query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
-//$query_year = " AND DI_DATE BETWEEN '2017/01/01' AND '2021/12/31'";
+//$query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
+$query_year = " AND DI_DATE BETWEEN '2000/01/01' AND '2021/12/31'";
 //$query_year = " AND DI_DATE BETWEEN '2022/05/15' AND '" . date("Y/m/d") . "'";
 
 $sql_sqlsvr = $select_query_daily . $select_query_daily_cond . $query_daily_cond_ext . $query_year . $select_query_daily_order;
@@ -97,7 +97,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $p_group = "P4";
     }
 
-    $sql_find = "SELECT * FROM ims_product_sale_cockpit "
+    $sql_find = "SELECT * FROM ims_product_sale_cockpit_prod_grp "
         . " WHERE DI_KEY = '" . $result_sqlsvr["DI_KEY"]
         . "' AND DI_REF = '" . $result_sqlsvr["DI_REF"]
         . "' AND DI_DATE = '" . $result_sqlsvr["DI_DATE"]
@@ -107,7 +107,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
 
-        $sql_update = " UPDATE ims_product_sale_cockpit SET AR_CODE=:AR_CODE,AR_NAME=:AR_NAME,SLMN_CODE=:SLMN_CODE,SLMN_NAME=:SLMN_NAME
+        $sql_update = " UPDATE ims_product_sale_cockpit_prod_grp SET AR_CODE=:AR_CODE,AR_NAME=:AR_NAME,SLMN_CODE=:SLMN_CODE,SLMN_NAME=:SLMN_NAME
 ,SKU_CODE=:SKU_CODE,SKU_NAME=:SKU_NAME,SKU_CAT=:SKU_CAT,ICCAT_NAME=:ICCAT_NAME,TRD_QTY=:TRD_QTY,TRD_U_PRC=:TRD_U_PRC
 ,TRD_DSC_KEYINV=:TRD_DSC_KEYINV,TRD_B_SELL=:TRD_B_SELL
 ,TRD_B_VAT=:TRD_B_VAT,TRD_G_KEYIN=:TRD_G_KEYIN,WL_CODE=:WL_CODE,BRANCH=:BRANCH,BRN_CODE=:BRN_CODE
@@ -159,7 +159,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
     } else {
 
-        $sql = " INSERT INTO ims_product_sale_cockpit(DI_KEY,DI_REF,DI_DATE,DI_MONTH,DI_MONTH_NAME,DI_YEAR
+        $sql = " INSERT INTO ims_product_sale_cockpit_prod_grp(DI_KEY,DI_REF,DI_DATE,DI_MONTH,DI_MONTH_NAME,DI_YEAR
         ,AR_CODE,AR_NAME,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,SKU_CAT,ICCAT_NAME,TRD_QTY,TRD_U_PRC
         ,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,WL_CODE,BRANCH,DT_DOCCODE,TRD_SEQ,BRN_CODE,BRN_NAME,DI_TIME_CHK,PGROUP)
         VALUES (:DI_KEY,:DI_REF,:DI_DATE,:DI_MONTH,:DI_MONTH_NAME,:DI_YEAR,:AR_CODE,:AR_NAME,:SLMN_CODE,:SLMN_NAME,:SKU_CODE,:SKU_NAME,:SKU_CAT
