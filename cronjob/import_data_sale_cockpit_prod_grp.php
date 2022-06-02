@@ -13,6 +13,11 @@ $str_doc1 = array("CS08", "CV07", "DS07", "IV07");
 $str_doc2 = array("CS03", "CV03", "DS03", "IV03");
 $str_doc3 = array("CS02", "CV02", "DS02", "IV02");
 
+$group1 = "6SAC08 2SAC01 2SAC09 2SAC11 2SAC02 2SAC06 2SAC05 2SAC04 2SAC03 2SAC12 2SAC07 2SAC08 2SAC10 2SAC13 2SAC14 2SAC15 3SAC03 1SAC10";
+$group2 = "5SAC02 8SAC11 5SAC01 TA01-001 8SAC09 TA01-003 8CPA01-002 8BTCA01-002 8CPA01-001 8BTCA01-001";
+$group3 = "9SA01 999-13 999-07 999-08 TATA-004";
+$group4 = "TATA-003 SAC08 10SAC12";
+
 $str_group1 = array("6SAC08","2SAC01","2SAC09","2SAC11","2SAC02","2SAC06","2SAC05","2SAC04","2SAC03","2SAC12","2SAC07","2SAC08","2SAC10","2SAC13","2SAC14","2SAC15","3SAC03","1SAC10");
 $str_group2 = array("5SAC02","8SAC11","5SAC01","TA01-001","8SAC09","TA01-003","8CPA01-002","8BTCA01-002","8CPA01-001","8BTCA01-001");
 $str_group3 = array("9SA01","999-13","999-07","999-08","TATA-004");
@@ -24,7 +29,7 @@ echo "\n\r" . date("Y/m/d", strtotime("yesterday"));
 $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CS08','CV07','DS07','IV07','CS03','CV03','DS03','IV03','CS02','CV02','DS02','IV02')) ";
 
 //$query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
-$query_year = " AND DI_DATE BETWEEN '2000/01/01' AND '2021/12/31'";
+$query_year = " AND DI_DATE BETWEEN '2012/02/28' AND '2021/12/31'";
 //$query_year = " AND DI_DATE BETWEEN '2022/05/15' AND '" . date("Y/m/d") . "'";
 
 $sql_sqlsvr = $select_query_daily . $select_query_daily_cond . $query_daily_cond_ext . $query_year . $select_query_daily_order;
@@ -55,20 +60,20 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     $branch = "";
 
     if (in_array($DT_DOCCODE, $str_doc1)) {
-        $branch = "CP-340";
+        $branch = "CP-1";
+        //$branch = "CP-340";
     }
 
     if (in_array($DT_DOCCODE, $str_doc2)) {
-        $branch = "CP-BY";
+        $branch = "CP-2";
+        //$branch = "CP-BY";
     }
 
     if (in_array($DT_DOCCODE, $str_doc3)) {
-        $branch = "CP-RP";
+        $branch = "CP-3";
+        //$branch = "CP-RP";
     }
 
-    if (in_array($DT_DOCCODE, $str_doc4)) {
-        $branch = "CP-BB";
-    }
 
     echo "[ " . $DT_DOCCODE . " | " . $branch . " ]" . "\n\r";
 
