@@ -1,0 +1,300 @@
+<?php
+include('includes/Header.php');
+if (strlen($_SESSION['alogin']) == "") {
+    header("Location: index");
+} else {
+
+    include("config/connect_db.php");
+
+    $month_num = str_replace('0', '', date('m'));
+
+    $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month_num . "'";
+
+    $stmt_curr_month = $conn->prepare($sql_curr_month);
+    $stmt_curr_month->execute();
+    $MonthCurr = $stmt_curr_month->fetchAll();
+    foreach ($MonthCurr as $row_curr) {
+        $month_name = $row_curr["month_name"];
+    }
+
+    $sql_month = " SELECT * FROM ims_month ";
+    $stmt_month = $conn->prepare($sql_month);
+    $stmt_month->execute();
+    $MonthRecords = $stmt_month->fetchAll();
+
+    $sql_year = " SELECT DISTINCT(DI_YEAR) AS DI_YEAR
+ FROM ims_product_sale_cockpit WHERE DI_YEAR >= 2019
+ order by DI_YEAR desc ";
+    $stmt_year = $conn->prepare($sql_year);
+    $stmt_year->execute();
+    $YearRecords = $stmt_year->fetchAll();
+
+    $sql_branch = " SELECT * FROM ims_branch ";
+    $stmt_branch = $conn->prepare($sql_branch);
+    $stmt_branch->execute();
+    $BranchRecords = $stmt_branch->fetchAll();
+
+
+    ?>
+
+    <!DOCTYPE html>
+    <html lang="th">
+
+    <body id="page-top">
+    <div id="wrapper">
+        <?php
+        include('includes/Side-Bar.php');
+        ?>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <?php
+                include('includes/Top-Bar.php');
+                ?>
+
+                <!-- Container Fluid-->
+                <div class="container-fluid" id="container-wrapper">
+                    <input type="hidden" id="main_menu" value="<?php echo urldecode($_GET['m']) ?>">
+                    <input type="hidden" id="sub_menu" value="<?php echo urldecode($_GET['s']) ?>">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800"><?php echo urldecode($_GET['s']) ?></h1>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page'] ?>">Home</a>
+                            </li>
+                            <li class="breadcrumb-item"><?php echo urldecode($_GET['m']) ?></li>
+                            <li class="breadcrumb-item active"
+                                aria-current="page"><?php echo urldecode($_GET['s']) ?></li>
+                        </ol>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-12">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                </div>
+                                <div class="card-body">
+                                    <section class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12 col-md-offset-2">
+                                                <div class="panel">
+                                                    <div class="panel-body">
+                                                        <form id="myform" name="myform" action="" enctype="multipart/form-data">
+                                                        <div class="row">
+                                                            <br>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group has-success">
+                                                                    <label for="success" class="control-label">ค้นหาตามชื่อลูกค้า</label>
+                                                                    <div class="">
+                                                                        <input type="text" name="customer_name"
+                                                                               class="form-control"
+                                                                               id="customer_name" value="">
+                                                                    </div>
+                                                                </div>
+
+                                                                <!--label for="AR_CODE">เลือกลูกค้า :</label>
+                                                                <input type="hidden" name="AR_CODE" id="AR_CODE"
+                                                                       class="form-control">
+                                                                <input type="hidden" name="AR_NAME" id="AR_NAME"
+                                                                       class="form-control">
+                                                                <select id='selCustomer' class='form-control'
+                                                                        onchange="Onchange_AR_CODE();">
+                                                                    <option value='0'>- ค้นหารายชื่อลูกค้า -
+                                                                    </option>
+                                                                </select-->
+
+                                                                <div class="form-group has-success">
+                                                                    <label for="success" class="control-label">ค้นหาตามทะเบียนรถยนต์</label>
+                                                                    <div class="">
+                                                                        <input type="text" name="car_no"
+                                                                               class="form-control"
+                                                                               id="car_no" value="">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group has-success">
+                                                                    <label for="sku_name" class="control-label">ค้นหาตามสินค้า-บริการ</label>
+                                                                    <div class="">
+                                                                        <input type="text" name="sku_name"
+                                                                               class="form-control"
+                                                                               id="sku_name" value="">
+                                                                    </div>
+                                                                </div>
+
+                                                                <br>
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <button type="button" id="BtnSale"
+                                                                                name="BtnSale"
+                                                                                class="btn btn-primary mb-3">ค้นหา
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.col-md-8 col-md-offset-2 -->
+                                        </div>
+                                        <!-- /.row -->
+
+                                    </section>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!--Row-->
+
+                    <!-- Row -->
+
+                </div>
+
+                <!---Container Fluid-->
+
+            </div>
+
+            <?php
+            include('includes/Modal-Logout.php');
+            include('includes/Footer.php');
+            ?>
+
+        </div>
+    </div>
+
+    <!-- Scroll to top -->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <script src="vendor/select2/dist/js/select2.min.js"></script>
+
+    <!-- select2 css -->
+    <link href='js/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
+
+    <!-- select2 script -->
+    <script src='js/select2/dist/js/select2.min.js'></script>
+    <!-- Bootstrap Datepicker -->
+    <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <!-- Bootstrap Touchspin -->
+    <script src="vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js"></script>
+    <!-- ClockPicker -->
+    <script src="vendor/clock-picker/clockpicker.js"></script>
+    <!-- RuangAdmin Javascript -->
+    <script src="js/myadmin.min.js"></script>
+    <!-- Javascript for this page -->
+
+    <script src="vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
+    <script src="vendor/date-picker-1.9/locales/bootstrap-datepicker.th.min.js"></script>
+    <!--link href="vendor/date-picker-1.9/css/date_picker_style.css" rel="stylesheet"/-->
+    <link href="vendor/date-picker-1.9/css/bootstrap-datepicker.css" rel="stylesheet"/>
+
+    <script src="js/MyFrameWork/framework_util.js"></script>
+
+    <script src="js/popup.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#selCustomer").select2({
+                ajax: {
+                    url: "model/get_customer_ajax.php",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            searchTerm: params.term // search term
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+
+    </script>
+
+
+    <script>
+
+        function Onchange_AR_CODE() {
+
+            $('#AR_NAME').val($("#selCustomer").val());
+
+        }
+    </script>
+
+    <script>
+
+        $("#BtnExport-BAK").click(function () {
+
+            let customer_name = document.getElementById("customer_name").value;
+            let car_no = document.getElementById("car_no").value;
+            
+            document.forms['myform'].action = 'export_process/export_process_data_history_customer';
+            document.forms['myform'].target = '_blank';
+            document.forms['myform'].submit();
+            return true;
+        });
+
+    </script>
+
+    <script>
+
+        $("#BtnExport-BAKA").click(function () {
+
+                $.ajax({
+                    type: 'post',
+                    url: 'export_process/export_process_data_history_customer.php',
+                    data: $('form').serialize(),
+                    success: function () {
+                        alert('Success');
+                    }
+                });
+                return true;
+        });
+
+    </script>
+
+    <script>
+
+        $("#BtnSale").click(function () {
+
+            if (document.getElementById('customer_name').value === "" && document.getElementById('car_no').value === "") {
+                alert("กรุณาป้อนชื่อลูกค้า หรือ หมายเลขทะเบียนรถ");
+            } else {
+                let main_menu = document.getElementById("main_menu").value;
+                let sub_menu = document.getElementById("sub_menu").value;
+                let customer_name = document.getElementById("customer_name").value;
+                let car_no = document.getElementById("car_no").value;
+                let sku_name = document.getElementById("sku_name").value;
+                let url = "show_history_customer_data_detail.php?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
+                    + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no + '&sku_name=' + sku_name
+                    + '&action=QUERY';
+                OpenPopupCenter(url, "", "");
+            }
+
+        });
+
+    </script>
+
+    </body>
+
+    </html>
+
+<?php } ?>

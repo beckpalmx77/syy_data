@@ -1,7 +1,19 @@
 <?php
 
-$host = 'localhost';
+
+$host='sac.cckwqocv7kfy.ap-southeast-1.rds.amazonaws.com';
+$port = 'port=5432';
+$dbname = 'sac';
+$dbuser = 'sacadm';
+$dbpass = "sacadm";
+
+/*
+$host="localhost';
+$port = 'port=5432';
+$dbname = 'sac_dbs';
 $dbuser = 'postgres';
-$dbpass = 'SuperAdmin007';
-$dbname = 'MADB_PRODUCT_2564';
+$dbpass = 'Systemadmin007';
+*/
+
+
 

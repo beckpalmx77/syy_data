@@ -21,16 +21,19 @@ include('../cond_file/query_product_stock.php');
     $statement = $conn_sqlsvr->query($sql_main);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
     foreach ($results as $result) {
-        $sql_find = "SELECT * FROM ims_product_stock_balance WHERE SKU_CODE = '" . $result["SKU_CODE"] . "'"
+        $sql_find = "SELECT * FROM ims_product_stock_balance 
+                WHERE SKU_CODE = '" . $result["SKU_CODE"] . "'"
             . " AND ICCAT_CODE = '" . $result["ICCAT_CODE"] . "'"
             . " AND DI_DATE = '" . $result["DI_DATE"] . "'"
             . " AND WL_CODE = '" . $result["WL_CODE"] . "'"
             . " AND WH_CODE = '" . $result["WH_CODE"] . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
+        echo $sql_find . $result["DI_DATE"] . " | " . $result["SKU_CODE"] . " | " . $result["UTQ_QTY"] . "\n\r";
         if ($nRows > 0) {
             $sql = " UPDATE ims_product_stock_balance SET ICCAT_NAME=:ICCAT_NAME,SKU_NAME=:SKU_NAME,UTQ_QTY=:UTQ_QTY,QTY=:QTY
                 ,WL_NAME=:WL_NAME,WH_NAME=:WH_NAME,update_date=:update_date WHERE SKU_CODE = :SKU_CODE AND DI_DATE = :DI_DATE
                  AND ICCAT_CODE=:ICCAT_CODE AND WL_CODE=:WL_CODE AND WH_CODE=:WH_CODE ";
+            echo $sql . $result["DI_DATE"] . " | " . $result["SKU_CODE"] . " | " . $result["UTQ_QTY"]  . "\n\r";
             $query = $conn->prepare($sql);
             $query->bindParam(':ICCAT_NAME', $result["ICCAT_NAME"], PDO::PARAM_STR);
             $query->bindParam(':SKU_NAME', $result["SKU_NAME"], PDO::PARAM_STR);
@@ -48,6 +51,7 @@ include('../cond_file/query_product_stock.php');
         } else {
             $sql = "INSERT INTO ims_product_stock_balance(ICCAT_CODE,ICCAT_NAME,DI_DATE,SKU_CODE,SKU_NAME,WH_CODE,WL_CODE,UTQ_QTY,QTY,WH_NAME,WL_NAME,create_date) 
                 VALUES (:ICCAT_CODE,:ICCAT_NAME,:DI_DATE,:SKU_CODE,:SKU_NAME,:WH_CODE,:WL_CODE,:UTQ_QTY,:QTY,:WH_NAME,:WL_NAME,:create_date)";
+            echo $sql . $result["DI_DATE"] . " | " . $result["SKU_CODE"] . " | " . $result["UTQ_QTY"]  . "\n\r";
             $query = $conn->prepare($sql);
             $query->bindParam(':ICCAT_CODE', $result["ICCAT_CODE"], PDO::PARAM_STR);
             $query->bindParam(':ICCAT_NAME', $result["ICCAT_NAME"], PDO::PARAM_STR);
@@ -66,5 +70,8 @@ include('../cond_file/query_product_stock.php');
 
     }
 //}
+
+$conn_sqlsvr = null;
+
 
 

@@ -12,6 +12,12 @@ $filename = $branch . "-" . "Data_Sale_Daily-" . date('m/d/Y H:i:s', time()) . "
 include('../config/connect_sqlserver.php');
 include('../cond_file/doc_info_sale_daily_cp.php');
 
+$customer_except_list = array("SAC.0000328");
+
+$DT_DOCCODE_MINUS1 = "IS";
+$DT_DOCCODE_MINUS2 = "IIS";
+$DT_DOCCODE_MINUS3 = "IC";
+
 switch ($branch) {
     case "CP-340":
         $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4')) ";
@@ -24,6 +30,12 @@ switch ($branch) {
         break;
     case "CP-BB":
         $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
+        break;
+    case "ALL":
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4',
+        'CS.8','CS.9','IC.3','IC.4','IS.3','IS.4','S.5','S.6',
+        'CS.6','CS.7','IC.1','IC.2','IS.1','IS.2','S.1','S.2',
+        'CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
         break;
 }
 
@@ -45,10 +57,11 @@ $month_arr=array(
     "12"=>"ธันวาคม"
 );
 
+/*
 $month = substr($_POST['doc_date_start'], 3, 2);
 $month_name = $month_arr[$month];
-
 $year = substr($_POST['doc_date_to'], 6, 4);
+*/
 
 $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
     . $query_daily_cond_ext
@@ -65,49 +78,72 @@ $query->execute();
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
-    $data .= " " . $row['DI_DATE'] . ",";
-    $data .= " " . $month_name. ",";
-    $data .= " " . $year . ",";
 
-    $data .= str_replace(",", "^", $row['AR_CODE']) . ",";
-    $data .= str_replace(",", "^", $row['SKU_CODE']) . ",";
-    $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
+    if ($row['ICCAT_CODE']!=="6SAC08") {
 
-    $data .= str_replace(",", "^", $row['ICCAT_NAME']) . ",";
-    //$data .= " " . ",";
-    $data .= str_replace(",", "^", $row['BRN_NAME']) . ",";
-    $data .= str_replace(",", "^", $row['DI_REF']) . ",";
-    $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
-    $data .= str_replace(",", "^", $row['SLMN_CODE']) . ",";
+        $month = substr($row['DI_DATE'], 3, 2);
+        $month_name = $month_arr[$month];
+        $year = substr($row['DI_DATE'], 6, 4);
 
+        $data .= " " . $row['DI_DATE'] . ",";
+        $data .= " " . $month_name . ",";
+        $data .= " " . $year . ",";
 
-    //$TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
+        $data .= str_replace(",", "^", $row['AR_CODE']) . ",";
+        $data .= str_replace(",", "^", $row['SKU_CODE']) . ",";
+        $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
 
-    $TRD_QTY = $row['TRD_QTY'];
-    $TRD_U_PRC = $row['TRD_U_PRC'];
-    $TRD_DSC_KEYINV = $row['TRD_DSC_KEYINV'];
-    $TRD_B_SELL = $row['TRD_G_SELL'];
-    $TRD_B_VAT = $row['TRD_G_VAT'];
-    $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
+        $data .= str_replace(",", "^", $row['ICCAT_NAME']) . ",";
+        //$data .= " " . ",";
+        $data .= str_replace(",", "^", $row['BRN_NAME']) . ",";
+        $data .= str_replace(",", "^", $row['DI_REF']) . ",";
+        $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
+        $data .= str_replace(",", "^", $row['SLMN_CODE']) . ",";
 
 
-    //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
-    //fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
-    //. $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
-    //fclose($my_file);
+        $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
 
-    $data .= $TRD_QTY . ",";
-    $data .= $TRD_U_PRC . ",";
-    $data .= $TRD_DSC_KEYINV . ",";
-    $data .= " " . ",";
-    $data .= $TRD_B_SELL . ",";
-    $data .= $TRD_B_VAT . ",";
-    $data .= $TRD_G_KEYIN . ",";
-    $data .= str_replace(",", "^", $row['WL_CODE']) . "\n";
+        if ((strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS1) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS2) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS3) !== false)) {
+            $TRD_QTY = "-" . $row['TRD_QTY'];
+            $TRD_U_PRC = "-" . $row['TRD_U_PRC'];
+            $TRD_DSC_KEYINV = "-" . $row['TRD_DSC_KEYINV'];
+            $TRD_B_SELL = "-" . $row['TRD_G_SELL'];
+            $TRD_B_VAT = "-" . $row['TRD_G_VAT'];
+            $TRD_G_KEYIN = "-" . $row['TRD_G_KEYIN'];
+        } else {
+            $TRD_QTY = $row['TRD_QTY'];
+            $TRD_U_PRC = $row['TRD_U_PRC'];
+            $TRD_DSC_KEYINV = $row['TRD_DSC_KEYINV'];
+            $TRD_B_SELL = $row['TRD_G_SELL'];
+            $TRD_B_VAT = $row['TRD_G_VAT'];
+            $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
+        }
+
+        if (in_array($row['AR_CODE'], $customer_except_list)) {
+            $TRD_B_SELL = "0";
+            $TRD_B_VAT = "0";
+            $TRD_G_KEYIN = "0";
+        }
+
+
+        //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
+        //fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
+        //. $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
+        //fclose($my_file);
+
+        $data .= $TRD_QTY . ",";
+        $data .= $TRD_U_PRC . ",";
+        $data .= $TRD_DSC_KEYINV . ",";
+        $data .= " " . ",";
+        $data .= $TRD_B_SELL . ",";
+        $data .= $TRD_B_VAT . ",";
+        $data .= $TRD_G_KEYIN . ",";
+        $data .= str_replace(",", "^", $row['WL_CODE']) . "\n";
+    }
 
 }
 
-$data = iconv("utf-8", "tis-620", $data);
+$data = iconv("utf-8", "tis-620//IGNORE", $data);
 echo $data;
 
 exit();

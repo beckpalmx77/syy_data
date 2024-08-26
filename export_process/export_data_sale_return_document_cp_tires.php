@@ -47,10 +47,11 @@ $month_arr=array(
     "12"=>"ธันวาคม"
 );
 
+/*
 $month = substr($_POST['doc_date_start'], 3, 2);
 $month_name = $month_arr[$month];
-
 $year = substr($_POST['doc_date_to'], 6, 4);
+*/
 
 $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
     . $query_daily_cond_ext . $query_daily_cond_ext_tires
@@ -66,6 +67,10 @@ $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+
+    $month = substr($row['DI_DATE'], 3, 2);
+    $month_name = $month_arr[$month];
+    $year = substr($row['DI_DATE'], 6, 4);
 
     $data .= " " . $row['DI_DATE'] . ",";
     $data .= " " . $month_name. ",";
@@ -109,7 +114,8 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 }
 
-$data = iconv("utf-8", "tis-620", $data);
+// $data = iconv("utf-8", "tis-620", $data);
+$data = iconv("utf-8", "windows-874//IGNORE", $data);
 echo $data;
 
 exit();

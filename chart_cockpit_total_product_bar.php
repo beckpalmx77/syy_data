@@ -121,6 +121,8 @@ include("config/connect_db.php");
     </div>
 </div>
 
+<?php include("includes/stick_menu.php"); ?>
+
 <script>
     function DisplayGraph_Monthly() {
 

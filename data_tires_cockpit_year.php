@@ -19,6 +19,9 @@ switch ($product_group) {
     case 'P4' :
         $product_group_name = "อื่นๆ";
         break;
+    case 'PALL' :
+        $product_group_name = "รวม ยาง + อะไหล่ + ค่าแรง-ค่าบริการ";
+        break;
 }
 
 //$month = "4";
@@ -153,6 +156,12 @@ foreach ($MonthRecords as $row) {
                 <?php
                 $date = date("d/m/Y");
                 $total = 0;
+                if ($product_group==='PALL') {
+                    $where = " WHERE BRANCH = '" . $BRANCH . "'" ;
+                } else {
+                    $where = " WHERE PGROUP = '" . $product_group . "' AND BRANCH = '" . $BRANCH . "'" ;
+                }
+
                 $sql_brand = " 
 SELECT DI_YEAR,
 SUM(IF(DI_MONTH='1',TRD_QTY,0)) AS 1_QTY,
@@ -179,17 +188,15 @@ SUM(IF(DI_MONTH='11',TRD_QTY,0)) AS 11_QTY,
 SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
 SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
 SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
- FROM ims_product_sale_cockpit 
- WHERE PGROUP = '" . $product_group . "' AND BRANCH = '" . $BRANCH . "'" . "
- GROUP BY DI_YEAR 
- ORDER BY DI_YEAR ";
+ FROM ims_product_sale_cockpit "
+. $where
+. " GROUP BY DI_YEAR 
+ ORDER BY DI_YEAR DESC ";
 
                 $statement_brand = $conn->query($sql_brand);
                 $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
 
-                foreach ($results_brand
-
-                as $row_brand) { ?>
+                foreach ($results_brand as $row_brand) { ?>
 
                 <tr>
                     <td><?php echo htmlentities($row_brand['DI_YEAR']); ?></td>
@@ -271,6 +278,11 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
             <?php
             $date = date("d/m/Y");
             $total = 0;
+            if ($product_group==='PALL') {
+                $where = " " ;
+            } else {
+                $where = " WHERE PGROUP = '" . $product_group . "' ";
+            }
             $sql_brand = "
 SELECT 
 DI_YEAR,
@@ -298,18 +310,19 @@ SUM(IF(DI_MONTH='11',TRD_QTY,0)) AS 11_QTY,
 SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
 SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
 SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
- FROM ims_product_sale_cockpit  
- WHERE PGROUP = '" . $product_group . "'
- GROUP BY DI_YEAR ";
+FROM ims_product_sale_cockpit"
+. $where
+. " GROUP BY DI_YEAR 
+ ORDER BY DI_YEAR DESC ";
+
+
 
             //WHERE DI_YEAR = '" . $year . "'
 
             $statement_brand = $conn->query($sql_brand);
             $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($results_brand
-
-            as $row_brand) { ?>
+            foreach ($results_brand as $row_brand) { ?>
 
             <tr>
                 <td align="right"><p class="number"><?php echo htmlentities($row_brand['DI_YEAR']); ?></p></td>
@@ -348,6 +361,7 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
     <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
 </div>
 
+<?php include("includes/stick_menu.php"); ?>
 
 </body>
 </html>

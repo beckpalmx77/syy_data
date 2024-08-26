@@ -8,13 +8,20 @@ if (strlen($_SESSION['alogin']) == "") {
     require_once 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
     $detect = new Mobile_Detect;
 
-    $sql_curr_month = " SELECT * FROM ims_month where month = '" . date("n") . "'";
+    $year = date("Y");
+    $month = date("n");
+    $date = date("d/m/Y");
+
+    $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month . "'";
     $stmt_curr_month = $conn->prepare($sql_curr_month);
     $stmt_curr_month->execute();
     $MonthCurr = $stmt_curr_month->fetchAll();
     foreach ($MonthCurr as $row_curr) {
         $month_name = $row_curr["month_name"];
     }
+
+    $sale_point = 1500000;
+    $sale_point_text = "";
 
     ?>
 
@@ -54,7 +61,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <?php echo date("d/m/Y"); ?>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
+                                    <h5 class="card-title">ปี <?php echo $year; ?></h5>
                                     <canvas id="myChartDaily" width="200" height="200"></canvas>
                                 </div>
                                 <div class="card-body">
@@ -79,6 +86,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
                                                       FROM ims_product_sale_cockpit 
                                                       WHERE DI_DATE = '" . $date . "'
+                                                      AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
                                                       GROUP BY  BRANCH
                                                       ORDER BY BRANCH";
 
@@ -108,7 +116,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <?php echo $month_name . " " . date("Y"); ?>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
+                                    <h5 class="card-title">ปี <?php echo $year; ?></h5>
                                     <canvas id="myChartMonthly" width="200" height="200"></canvas>
                                 </div>
                                 <div class="card-body">
@@ -128,29 +136,86 @@ if (strlen($_SESSION['alogin']) == "") {
                                         </tfoot>
                                         <tbody>
                                         <?php
-                                        $date = date("d/m/Y");
+
                                         $total = 0;
                                         $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
                                                       FROM ims_product_sale_cockpit 
                                                       WHERE DI_MONTH = '" . date("n") . "'
                                                       AND DI_YEAR = '" . date("Y") . "'
+                                                      AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
                                                       GROUP BY  BRANCH
                                                       ORDER BY BRANCH";
 
                                         $statement_daily = $conn->query($sql_daily);
                                         $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results_daily
+                                        foreach ($results_daily as $row_daily) {
 
-                                        as $row_daily) { ?>
+                                        $sql_target = " SELECT * FROM ims_sale_target WHERE target_month = '" . date("n") . "' AND target_year = '" . date("Y") . "'"
+                                        . " AND sale_id = '" . $row_daily['BRANCH'] . "'"
+                                        . " ORDER BY target_year DESC , target_month DESC , sale_id ";
+
+                                        /*
+                                        $sql_target_s .= "\n\r" . $sql_target . " | " . $sale_point ;
+                                        $my_file = fopen("sql_target.txt", "w") or die("Unable to open file!");
+                                        fwrite($my_file, "SQL = " . $sql_target_s);
+                                        fclose($my_file);
+                                        */
+
+                                        $stmt_target = $conn->prepare($sql_target);
+                                        $stmt_target->execute();
+                                        $TargetCurr = $stmt_target->fetchAll();
+                                        foreach ($TargetCurr as $trow_curr) {
+                                            $sale_point = $trow_curr["target_money"];
+                                        }
+
+                                        /*
+                                        $sql_target_s .= "\n\r" . $sale_point;
+                                        $my_file = fopen("target_point.txt", "w") or die("Unable to open file!");
+                                        fwrite($my_file, "sale_point = " . $sale_point);
+                                        fclose($my_file);
+                                        */
+
+                                        ?>
 
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
                                             <td>
-                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
+                                                <?php $percent_sale = ($row_daily['TRD_G_KEYIN'] / $sale_point) * 100;
+                                                $total_remain = $sale_point - $row_daily['TRD_G_KEYIN'];
+                                                $percent_total_remain = ($total_remain / $sale_point) * 100;
+                                                $data = "style='width: " . $percent_sale . "%'";
+                                                ?>
+                                                <p class="number"><?php echo "ยอดขายปัจจุบัน = " . htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
+
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                         role="progressbar" <?php echo $data ?>
+                                                         aria-valuenow="<?php echo $percent_sale ?>" aria-valuemin="0"
+                                                         aria-valuemax="100"><?php echo htmlentities(number_format($percent_sale, 2)) . "%" ?>
+                                                    </div>
+                                                </div>
+
+                                                <p class="number">
+                                                    ยอดเป้าหมายคือ <?php echo htmlentities(number_format($sale_point, 2)) ?></p>
+                                                <p class="number">
+                                                    คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย "; ?></p>
+                                                <?php if (number_format($total_remain, 2) <= 0) {
+                                                    $text1 = "เกินจากเป้ายอดขาย คือ " . number_format(abs($total_remain), 2);
+                                                    $text2 = " หรือ " . number_format(abs($percent_total_remain), 2) . " % ";
+                                                } else {
+                                                    $text1 = "เป้ายอดขายที่ต้องทำเพิ่ม คือ " . number_format($total_remain, 2);
+                                                    $text2 = " หรือ " . number_format($percent_total_remain, 2) . " % ";
+                                                } ?>
+
+                                                <p class="number">
+                                                    <?php echo $text1 . $text2; ?> </p>
+
                                             </td>
+
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
+
 
                                         </tbody>
                                         <?php echo "ยอดขายรวมทุกสาขา เดือน " . $month_name . " " . date("Y") . " = " . number_format($total, 2) . " บาท " ?>
@@ -160,8 +225,8 @@ if (strlen($_SESSION['alogin']) == "") {
                             </div>
                         </div>
 
-                        <?php include('display_chart_tires_brand_admin.php');
-                        ?>
+                        <?php include('display_chart_tires_brand_admin.php'); ?>
+
 
                     </div>
 
@@ -200,22 +265,22 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
 
         $(document).ready(function () {
-        /*
+            /*
 
-        GET_DATA("ims_order_master", "1");
-        GET_DATA("ims_product", "2");
-        GET_DATA("ims_customer_ar", "3");
-        GET_DATA("ims_supplier", "4");
-
-        setInterval(function () {
             GET_DATA("ims_order_master", "1");
             GET_DATA("ims_product", "2");
             GET_DATA("ims_customer_ar", "3");
             GET_DATA("ims_supplier", "4");
-        }, 3000);
 
-         */
-    });
+            setInterval(function () {
+                GET_DATA("ims_order_master", "1");
+                GET_DATA("ims_product", "2");
+                GET_DATA("ims_customer_ar", "3");
+                GET_DATA("ims_supplier", "4");
+            }, 3000);
+
+             */
+        });
 
 
     </script>

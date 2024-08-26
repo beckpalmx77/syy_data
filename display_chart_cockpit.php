@@ -33,7 +33,7 @@ if (strlen($_SESSION['alogin']) == "") {
     $stmt_year->execute();
     $YearRecords = $stmt_year->fetchAll();
 
-    $sql_branch = " SELECT * FROM ims_branch ";
+    $sql_branch = " SELECT * FROM ims_branch where chk_cond = 'Y' ";
     $stmt_branch = $conn->prepare($sql_branch);
     $stmt_branch->execute();
     $BranchRecords = $stmt_branch->fetchAll();
@@ -159,6 +159,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
         </div>
     </div>
+
 
     <!-- Scroll to top -->
     <a class="scroll-to-top rounded" href="#page-top">

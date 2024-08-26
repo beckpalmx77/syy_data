@@ -21,12 +21,18 @@ for ($x = 0; $x <= 3; $x++) {
 
     $year = $year_start - $x;
 
+    if ($product_group==='PALL') {
+        $where = " WHERE ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC') AND DI_YEAR = '" . $year . "' AND BRANCH = '" . $BRANCH . "' ";
+    } else {
+        $where = " WHERE ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC') AND PGROUP = '" . $product_group . "' AND DI_YEAR = '" . $year . "' AND BRANCH = '" . $BRANCH . "' ";
+    }
+
     $str_return = "[";
 
     $sql_get = " SELECT DI_YEAR,DI_MONTH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
- FROM ims_product_sale_cockpit 
- WHERE PGROUP = '" . $product_group . "' AND DI_YEAR = '" . $year . "' AND BRANCH = '" . $BRANCH . "' 
- GROUP BY DI_MONTH,DI_YEAR 
+ FROM ims_product_sale_cockpit "
+ . $where
+ . " GROUP BY DI_MONTH,DI_YEAR 
  ORDER BY CAST(DI_MONTH AS UNSIGNED) ";
 
     //echo $sql_get;

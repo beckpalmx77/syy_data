@@ -1,0 +1,1 @@
+php shrink_reindex_dbs.php

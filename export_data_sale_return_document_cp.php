@@ -94,6 +94,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <option>CP-BY</option>
                                                                             <option>CP-RP</option>
                                                                             <option>CP-BB</option>
+                                                                            <option>ALL</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>

@@ -16,6 +16,7 @@ $sql_get = "
  FROM ims_product_sale_cockpit 
  WHERE DI_YEAR = '" . $year . "'   AND DI_MONTH = '" . $month . "'
  and BRANCH like '%" . $branch . "'
+ AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
  GROUP BY  BRANCH,DI_DATE
  ORDER BY STR_TO_DATE(DI_DATE,'%d/%m/%Y')
 ";

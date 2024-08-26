@@ -98,7 +98,8 @@ if(strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS) !== false){
 
 }
 
-$data = iconv("utf-8", "tis-620", $data);
+// $data = iconv("utf-8", "tis-620", $data);
+$data = iconv("utf-8", "windows-874//IGNORE", $data);
 echo $data;
 
 exit();

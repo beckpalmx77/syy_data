@@ -1,24 +1,19 @@
 <?php
 
 
-$host = '192.168.39.13';
+$host = '192.168.88.13';
 $dbuser = 'SYY';
 $dbpass = '39122222';
-$dbname = 'SYY';
+$dbname = 'SAC';
 
+
+//$host = 'BECKPALMX-HP\SQLEXPRESS';
 /*
 $host = '192.168.88.40';
 $dbuser = 'sa';
 $dbpass = 'sadmin';
-$dbname = 'SYY';
+$dbname = 'SAC';
 */
-
-
-//$host = 'BECKPALMX-HP\SQLEXPRESS';
-//$dbuser = 'sa';
-//$dbpass = 'sadmin';
-//$dbname = 'SAC';
-
 
 /*
 $host = 'SAC-SHINEIT\MSSQLEXPRESS';

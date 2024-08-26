@@ -1,5 +1,5 @@
 <?php
-include('../config/connect_sqlserver.php');
+include('../config/connect_db.php');
 include('../config/lang.php');
 include('../util/reorder_record.php');
 
@@ -14,19 +14,20 @@ header("Access-Control-Max-Age: 3600");
 
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+$month = "3";
+$year = "2022";
+
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
+
+$sql_get = "  SELECT DI_REF,DT_DOCCODE,AR_NAME ,SUM(TRD_G_KEYIN) AS SUM_TOTAL,BRANCH,DI_MONTH_NAME,DI_YEAR FROM ims_product_sale_cockpit 
+WHERE DI_MONTH =  " . $month . " AND DI_YEAR = " . $year . "
+GROUP BY DI_REF 
+ORDER BY AR_NAME,BRANCH ";
 
 //ตรวจสอบหากใช้ Method GET
 
 if ($requestMethod == 'GET') {
-
-    if (isset($_GET['id']) && !empty($_GET['id'])) {
-        $id = $_GET['id'];
-        $sql_get = "SELECT * FROM ims_provinces WHERE id = " . $id;
-    } else {
-        $sql_get = "SELECT * FROM ims_provinces ";
-    }
 
     $return_arr = array();
 
@@ -34,17 +35,17 @@ if ($requestMethod == 'GET') {
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($results as $result) {
-        $return_arr[] = array("id" => $result['id'],
-            "provinceid" => $result['province_id'],
-            "provincecode" => $result['province_code'],
-            "provincename" => $result['province_name'],
-            "provincenameeng" => $result['province_name_eng'],
-            "geoid" => $result['geo_id'],
-            "status" => $result['status']);
+        $return_arr[] = array("DI_REF" => $result['DI_REF'],
+            "DT_DOCCODE" => $result['DT_DOCCODE'],
+            "AR_NAME" => $result['AR_NAME'],
+            "SUM_TOTAL" => $result['SUM_TOTAL'],
+            "BRANCH" => $result['BRANCH'],
+            "DI_MONTH_NAME" => $result['DI_MONTH_NAME'],
+            "DI_YEAR" => $result['DI_YEAR']);
     }
 
-    $provinces = json_encode($return_arr);
-    file_put_contents("provinces.json", $provinces);
+    $dataresult = json_encode($return_arr);
+    file_put_contents("ims_product_sale_cockpit.json", $dataresult);
     echo json_encode($return_arr);
 
 }

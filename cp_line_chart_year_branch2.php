@@ -128,6 +128,11 @@ include ('engine/get_data_chart_year_branch2.php');
             <?php
             $date = date("d/m/Y");
             $total = 0;
+            if ($product_group==='PALL') {
+                $where = " WHERE BRANCH = '" . $BRANCH . "'" ;
+            } else {
+                $where = " WHERE PGROUP = '" . $product_group . "' AND BRANCH = '" . $BRANCH . "'" ;
+            }
             $sql_brand = " 
 SELECT DI_YEAR,
 SUM(IF(DI_MONTH='1',TRD_QTY,0)) AS 1_QTY,
@@ -154,10 +159,12 @@ SUM(IF(DI_MONTH='11',TRD_QTY,0)) AS 11_QTY,
 SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
 SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
 SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
- FROM ims_product_sale_cockpit 
- WHERE PGROUP like '%P1' AND BRANCH = '" . $BRANCH . "'" . "
- GROUP BY DI_YEAR 
+ FROM ims_product_sale_cockpit "
+ . $where
+ . " GROUP BY DI_YEAR 
  ORDER BY DI_YEAR ";
+
+// echo     $sql_brand ;
 
             $statement_brand = $conn->query($sql_brand);
             $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);

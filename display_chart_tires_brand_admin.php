@@ -1,3 +1,6 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<?php include("config/connect_db.php"); ?>
+
 <div class="col-md-6">
     <div class="card">
         <div class="card-header">
@@ -35,7 +38,7 @@
                 <tbody>
                 <form id="myform" name="myform" method="post">
                     <input type="hidden" name="year" id="year" class="form-control"
-                           value="<?php echo date("Y"); ?>">
+                           value="<?php echo $year; ?>">
                     <div class="row">
                         <div class="col-sm-12">
                             <button type="button" id="BtnSale" name="BtnSale"
@@ -47,7 +50,7 @@
                 </form>
                 <br>
                 <?php
-                $year = date("Y");
+
                 $total = 0;
                 $total_sale = 0;
 
@@ -57,6 +60,7 @@
                                         FROM ims_product_sale_cockpit                                        
                                         WHERE PGROUP IN ('P1')                                        
                                         AND DI_YEAR = '" . $year . "'
+                                        AND ICCAT_CODE <> '6SAC08'
                                         GROUP BY BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME
                                         ORDER BY SKU_CAT ";
 
@@ -84,6 +88,51 @@
                 </tbody>
                 <?php echo "รวม : ยางทั้งหมด  = " . number_format($total, 2) . " เส้น จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?>
             </table>
+
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <div>
+                        <div class="card-header">
+                            สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
+                            <?php echo $year; ?>
+                        </div>
+                        <div class="card-body">
+                            <?php include('cp_bar_chart_dash_by_year.php'); ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <div>
+                        <div class="card-header">
+                            สถิติ ยอดขาย Cockpit แต่ละสาขา เดือน <?php echo $month_name ." ปี " . $year; ?>
+                        </div>
+                        <div class="card-body">
+
+                            <?php include('cp_bar_chart_dash_day.php'); ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <div>
+                        <div class="card-header">
+                            สถิติ ยอดขาย Cockpit แต่ละสาขา เดือน <?php echo $month_name ." ปี " . $year; ?>
+                        </div>
+                        <div class="card-body">
+
+                            <?php include('cp_bar_chart_dash_day-2.php'); ?>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
         </div>
     </div>
 </div>

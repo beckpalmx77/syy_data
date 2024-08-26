@@ -1,5 +1,5 @@
 <?php
-
+include('includes/Header.php');
 include("config/connect_db.php");
 
 //$doc_date = substr($_POST['doc_date'], 6, 4) . "/" . substr($_POST['doc_date'], 3, 2) . "/" . substr($_POST['doc_date'], 0, 2);
@@ -31,6 +31,10 @@ foreach ($BranchRecords as $rows) {
     <meta charset="UTF-8">
     <meta date="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
     <script src="js/jquery-3.6.0.js"></script>
     <script src="js/chartjs-2.9.0.js"></script>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -56,7 +60,7 @@ foreach ($BranchRecords as $rows) {
         }
     </style>
 </head>
-
+<body id="page-top">
 <body onload="showGraph_Monthly();showGraph_Tires_Brand_Monthly();showGraph_Part_Monthly();">
 <div class="card">
     <div class="card-header bg-success text-white">
@@ -120,10 +124,11 @@ include("display_data_cockpit_detail_grp_monthly.php");
             $total_sale = 0;
             $sql_brand = " SELECT BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
  FROM ims_product_sale_cockpit
- WHERE SKU_CAT IN ('2SAC01','2SAC02','2SAC03','2SAC02','2SAC04','2SAC05','2SAC06','2SAC07','2SAC08','2SAC09','2SAC10','2SAC11','2SAC12','2SAC13','2SAC14','2SAC15')
+ WHERE PGROUP IN ('P1')
  AND DI_YEAR = '" . $year . "'
  AND DI_MONTH = '" . $month . "'
  AND BRANCH = '" . $branch . "'
+ AND ICCAT_CODE <> '6SAC08'
  GROUP BY BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME
  ORDER BY SKU_CAT ";
 
@@ -191,6 +196,7 @@ include("display_data_cockpit_detail_grp_monthly.php");
  AND DI_YEAR = '" . $year . "'
  AND DI_MONTH = '" . $month . "'
  AND BRANCH = '" . $branch . "'
+ AND ICCAT_CODE <> '6SAC08'
  GROUP BY SKU_CAT,ICCAT_NAME
  ORDER BY SKU_CAT ";
 
@@ -220,6 +226,17 @@ include("display_data_cockpit_detail_grp_monthly.php");
 include("display_data_cockpit_detail.php");
 ?-->
 
+<?php include("includes/stick_menu.php"); ?>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="js/myadmin.min.js"></script>
+
+<!-- Scroll to top -->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
 
 <script>
 

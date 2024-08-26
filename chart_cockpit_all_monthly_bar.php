@@ -15,6 +15,7 @@ $stmt_month = $conn->prepare($sql_month);
 $stmt_month->execute();
 $MonthRecords = $stmt_month->fetchAll();
 foreach ($MonthRecords as $row) {
+    $month_id = $row["month_id"];
     $month_name = $row["month_name"];
 }
 
@@ -131,6 +132,10 @@ foreach ($MonthRecords as $row) {
                 <th>DL</th>
                 <th>LLIT</th>
                 <th>LLIT</th>
+                <th>LE</th>
+                <th>LE</th>
+                <th>AT</th>
+                <th>AT</th>
                 <th>DS</th>
                 <th>DS</th>
                 <th>DT</th>
@@ -139,14 +144,10 @@ foreach ($MonthRecords as $row) {
                 <th>ML</th>
                 <th>PL</th>
                 <th>PL</th>
-                <th>AT</th>
-                <th>AT</th>
                 <th>CT</th>
                 <th>CT</th>
                 <th>GY</th>
                 <th>GY</th>
-                <th>LE</th>
-                <th>LE</th>
                 <th>YK</th>
                 <th>YK</th>
             </tr>
@@ -198,6 +199,10 @@ SUM(IF(BRN_CODE='DL',TRD_QTY,0)) AS DL_QTY,
 SUM(IF(BRN_CODE='DL',TRD_G_KEYIN,0)) AS DL_AMT,
 SUM(IF(BRN_CODE='LLIT',TRD_QTY,0)) AS LLIT_QTY,
 SUM(IF(BRN_CODE='LLIT',TRD_G_KEYIN,0)) AS LLIT_AMT,
+SUM(IF(BRN_CODE='LE',TRD_QTY,0)) AS LE_QTY,
+SUM(IF(BRN_CODE='LE',TRD_G_KEYIN,0)) AS LE_AMT,
+SUM(IF(BRN_CODE='AT',TRD_QTY,0)) AS AT_QTY,
+SUM(IF(BRN_CODE='AT',TRD_G_KEYIN,0)) AS AT_AMT,
 SUM(IF(BRN_CODE='DS',TRD_QTY,0)) AS DS_QTY,
 SUM(IF(BRN_CODE='DS',TRD_G_KEYIN,0)) AS DS_AMT,
 SUM(IF(BRN_CODE='DT',TRD_QTY,0)) AS DT_QTY,
@@ -206,14 +211,10 @@ SUM(IF(BRN_CODE='ML',TRD_QTY,0)) AS ML_QTY,
 SUM(IF(BRN_CODE='ML',TRD_G_KEYIN,0)) AS ML_AMT,
 SUM(IF(BRN_CODE='PL',TRD_QTY,0)) AS PL_QTY,
 SUM(IF(BRN_CODE='PL',TRD_G_KEYIN,0)) AS PL_AMT,
-SUM(IF(BRN_CODE='AT',TRD_QTY,0)) AS AT_QTY,
-SUM(IF(BRN_CODE='AT',TRD_G_KEYIN,0)) AS AT_AMT,
 SUM(IF(BRN_CODE='CT',TRD_QTY,0)) AS CT_QTY,
 SUM(IF(BRN_CODE='CT',TRD_G_KEYIN,0)) AS CT_AMT,
 SUM(IF(BRN_CODE='GY',TRD_QTY,0)) AS GY_QTY,
 SUM(IF(BRN_CODE='GY',TRD_G_KEYIN,0)) AS GY_AMT,
-SUM(IF(BRN_CODE='LE',TRD_QTY,0)) AS LE_QTY,
-SUM(IF(BRN_CODE='LE',TRD_G_KEYIN,0)) AS LE_AMT,
 SUM(IF(BRN_CODE='YK',TRD_QTY,0)) AS YK_QTY,
 SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT                
  FROM ims_product_sale_cockpit 
@@ -240,6 +241,10 @@ SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DL_AMT'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_QTY'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LE_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LE_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['AT_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['AT_AMT'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DS_QTY'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DS_AMT'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DT_QTY'], 2)); ?></p></td>
@@ -248,14 +253,10 @@ SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['ML_AMT'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['PL_QTY'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['PL_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['AT_QTY'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['AT_AMT'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['CT_QTY'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['CT_AMT'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['GY_QTY'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['GY_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LE_QTY'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LE_AMT'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['YK_QTY'], 2)); ?></p></td>
                 <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['YK_AMT'], 2)); ?></p></td>
                 <?php } ?>
@@ -336,6 +337,8 @@ SUM(IF(SKU_CAT='TA01-001',TRD_G_KEYIN,0)) AS PART_6
 
 
 </div>
+
+<?php include("includes/stick_menu.php"); ?>
 
 </body>
 </html>

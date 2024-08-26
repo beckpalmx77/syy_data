@@ -78,6 +78,9 @@ foreach ($BranchRecords as $rows) {
 </div>
 
 
+<?php include("includes/stick_menu.php"); ?>
+
+
 <script>
     function showGraph_Monthly() {
         {

@@ -15,6 +15,7 @@ $sql_get = " SELECT SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  T
  AND DI_YEAR = '" . $year . "'
  AND DI_MONTH = '" . $month . "'
  AND BRANCH = '" . $branch . "'
+ AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
  GROUP BY SKU_CAT,ICCAT_NAME
  ORDER BY SKU_CAT ";
 

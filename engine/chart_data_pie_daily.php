@@ -12,6 +12,7 @@ $sql_get = "
  LEFT JOIN ims_pgroup
  ON ims_pgroup.pgroup_id = ims_product_sale_cockpit.pgroup
  WHERE DI_DATE = '" . $doc_date . "' AND BRANCH = '" . $branch . "' AND TRD_G_KEYIN > 0  
+ AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
  GROUP BY  BRANCH,PGROUP,pgroup_name 
  ORDER BY PGROUP ";
 
