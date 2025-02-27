@@ -1,7 +1,7 @@
 <?php
 
 
-$host = '192.168.88.13';
+$host = '192.168.39.13';
 $dbuser = 'SYY';
 $dbpass = '39122222';
 $dbname = 'SAC';
