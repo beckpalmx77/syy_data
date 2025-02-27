@@ -84,6 +84,16 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     </div>
 
                                                                     <div class="form-group">
+                                                                        <label for="product_cat" class="control-label">ประเภทสินค้า</label>
+                                                                        <select id="product_cat" name="product_cat"
+                                                                                class="form-control select2">
+                                                                            <option value="-">-- เลือกทุกประเภท
+                                                                                --
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="form-group">
                                                                         <label for="branch"
                                                                                class="control-label">สาขา</label>
                                                                         <select id="branch" name="branch"
@@ -166,7 +176,8 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <!-- Select2 -->
-    <script src="vendor/select2/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Bootstrap Datepicker -->
     <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <!-- Bootstrap Touchspin -->
@@ -215,6 +226,78 @@ if (strlen($_SESSION['alogin']) == "") {
             });
         });
     </script>
+
+    <!--script>
+        $(document).ready(function () {
+            $('#product_cat').select2({
+                placeholder: "-- กรุณาเลือกประเภทสินค้า --",
+                allowClear: true,
+                ajax: {
+                    url: 'model/get_product_categories.php', // ไฟล์ PHP สำหรับดึงข้อมูล
+                    type: 'POST',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {search: params.term};
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {id: item.ICCAT_CODE, text: item.ICCAT_NAME};
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+    </script-->
+
+    <script>
+        $(document).ready(function () {
+            // Initialize Select2
+            $('#product_cat').select2({
+                placeholder: "-- เลือกทุกประเภท --",
+                allowClear: true,
+                ajax: {
+                    url: 'model/get_product_categories.php', // ไฟล์ PHP สำหรับดึงข้อมูล
+                    type: 'POST',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term // ส่งคำค้นหาไปยัง server
+                        };
+                    },
+                    processResults: function (data) {
+                        let options = [
+                            {
+                                id: "-",
+                                text: "-- เลือกทุกประเภท --"
+                            }
+                        ]; // เพิ่มตัวเลือก "-- กรุณาเลือกประเภทสินค้า --" เป็นค่าแรก
+                        return {
+                            results: options.concat(
+                                $.map(data, function (item) {
+                                    return {
+                                        id: item.ICCAT_CODE, // ค่าที่ส่งกลับ
+                                        text: item.ICCAT_NAME // ข้อความที่จะแสดง
+                                    };
+                                })
+                            )
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            // Reset to default option when user clears the selection
+            $('#product_cat').on('select2:clear', function () {
+                $('#product_cat').val('-').trigger('change');
+            });
+        });
+    </script>
+
 
     </body>
 

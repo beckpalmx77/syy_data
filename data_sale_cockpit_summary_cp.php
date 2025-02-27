@@ -27,7 +27,7 @@ $STR_WHERE = "WHERE STR_TO_DATE(DI_DATE, '%d/%m/%Y')  BETWEEN '" . $doc_date_sta
     <script src='vendor/calendar/main.js'></script>
     <script src='vendor/calendar/locales/th.js'></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
     <script src='js/util.js'></script>

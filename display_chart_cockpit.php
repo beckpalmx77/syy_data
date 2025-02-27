@@ -81,7 +81,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="panel">
                                                     <div class="panel-body">
 
-                                                        <form id="myform" name="myform" action="engine/chart_data_daily.php" method="post">
+                                                        <form id="myform" name="myform" action="" method="post">
 
                                                                 <div class="row">
                                                                     <div class="col-sm-12">

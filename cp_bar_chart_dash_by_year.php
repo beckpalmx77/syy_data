@@ -6,7 +6,8 @@ include('engine/get_data_chart_dash_year.php');
 ?>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script-->
 <!--script src="https://cdn.jsdelivr.net/npm/chart.js"></script-->
 

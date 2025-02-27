@@ -1,8 +1,10 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
+$product_cat = $_POST["product_cat"];
 $branch = $_POST["branch"];
 $sql_find_tel = "";
+$query_cat = "";
 $filename = $branch . "-" . "Data_Sale_Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 @header('Content-type: text/csv; charset=UTF-8');
@@ -36,19 +38,19 @@ switch ($branch) {
 $doc_date_start = substr($_POST['doc_date_start'], 6, 4) . "/" . substr($_POST['doc_date_start'], 3, 2) . "/" . substr($_POST['doc_date_start'], 0, 2);
 $doc_date_to = substr($_POST['doc_date_to'], 6, 4) . "/" . substr($_POST['doc_date_to'], 3, 2) . "/" . substr($_POST['doc_date_to'], 0, 2);
 
-$month_arr=array(
-    "01"=>"มกราคม",
-    "02"=>"กุมภาพันธ์",
-    "03"=>"มีนาคม",
-    "04"=>"เมษายน",
-    "05"=>"พฤษภาคม",
-    "06"=>"มิถุนายน",
-    "07"=>"กรกฎาคม",
-    "08"=>"สิงหาคม",
-    "09"=>"กันยายน",
-    "10"=>"ตุลาคม",
-    "11"=>"พฤศจิกายน",
-    "12"=>"ธันวาคม"
+$month_arr = array(
+    "01" => "มกราคม",
+    "02" => "กุมภาพันธ์",
+    "03" => "มีนาคม",
+    "04" => "เมษายน",
+    "05" => "พฤษภาคม",
+    "06" => "มิถุนายน",
+    "07" => "กรกฎาคม",
+    "08" => "สิงหาคม",
+    "09" => "กันยายน",
+    "10" => "ตุลาคม",
+    "11" => "พฤศจิกายน",
+    "12" => "ธันวาคม"
 );
 
 /*
@@ -57,13 +59,19 @@ $month_name = $month_arr[$month];
 $year = substr($_POST['doc_date_to'], 6, 4);
 */
 
+if ($product_cat !== '-') {
+    $query_cat = " AND ICCAT_CODE = '" . $product_cat . "' ";
+}
+
 $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
-    . $query_daily_cond_ext
+    . $query_daily_cond_ext . $query_cat
     . $select_query_daily_order;
 
-//$my_file = fopen("D-CP.txt", "w") or die("Unable to open file!");
-//fwrite($my_file, $String_Sql);
-//fclose($my_file);
+/*
+$my_file = fopen("sql_string.txt", "w") or die("Unable to open file!");
+fwrite($my_file, $String_Sql);
+fclose($my_file);
+*/
 
 $data = "วันที่,เดือน,ปี,รหัสลูกค้า,รหัสสินค้า,รายละเอียดสินค้า,รายละเอียด,ยี่ห้อ,INV ลูกค้า,ชื่อลูกค้า,เบอร์โทรฯ,ผู้แทนขาย,จำนวน,ราคาขาย,ส่วนลดรวม,ส่วนลดต่อเส้น,มูลค่ารวม,ภาษี 7%,มูลค่ารวมภาษี,คลัง,เลขที่ใบจอง,วันเวลาเปิดบิล,,วันเวลาปิดบิล\n";
 
@@ -72,11 +80,11 @@ $query->execute();
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
-/*
-    $sql_find_tel = "select TOP 1 * from ADDRBOOK 
-                    where ADDB_COMPANY LIKE '%" . $row['AR_NAME'] . "%' 
-                    and ADDB_PHONE IS NOT NULL ";
-*/
+    /*
+        $sql_find_tel = "select TOP 1 * from ADDRBOOK
+                        where ADDB_COMPANY LIKE '%" . $row['AR_NAME'] . "%'
+                        and ADDB_PHONE IS NOT NULL ";
+    */
 
     /*
         $sql_find_tel = "SELECT ARADDRESS.ARA_KEY,ADDRBOOK.ADDB_COMPANY,ADDB_PHONE, FROM  ARFILE
@@ -96,23 +104,56 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         $tel = $rows['ADDB_PHONE'] . " .";
     }
 
-    $pos1= strpos($row['DI_REMARK'],"B");
-    $pos2= strpos($row['DI_REMARK'],":");
-    $pos3= $pos2 - $pos1;
-    $str_reserve_id = substr($row['DI_REMARK'],$pos1,$pos3);
-
-    $sql_find_reserve = "SELECT DOCINFO.DI_REF,
-    FORMAT(cast(DOCINFO.DI_CRE_DATE as datetime), 'dd/MM/yyyy, HH:mm:ss') as START_BILL 
-    FROM  DOCINFO
-    WHERE DOCINFO.DI_REF = '" . $str_reserve_id . "'";
-
+    $searchStrings = ["B", "Q"];
+    $found = false;
+    $str_reserve_id = "";
     $reserve_id = "";
-    $query_reserve = $conn_sqlsvr->prepare($sql_find_reserve);
-    $query_reserve->execute();
-    while ($rows1 = $query_reserve->fetch(PDO::FETCH_ASSOC)) {
-        $reserve_id = $rows1['START_BILL'];
+    $rest = "";
+
+    if (!empty($row['DI_REMARK'])) { // ตรวจสอบว่ามีค่าใน DI_REMARK หรือไม่
+        foreach ($searchStrings as $searchString) {
+            $pos1 = strpos($row['DI_REMARK'], $searchString); // หาตำแหน่งของ B หรือ Q
+            $pos2 = strpos($row['DI_REMARK'], ":"); // หาตำแหน่งของ ":"
+
+            // ตรวจสอบว่าพบตัวอักษรและ ":" ในข้อความ และ ":" อยู่หลัง B หรือ Q
+            if ($pos1 !== false && $pos2 !== false && $pos2 > $pos1) {
+                $pos3 = $pos2 - $pos1; // คำนวณความยาวระหว่างตำแหน่ง
+                $str_reserve_id = substr($row['DI_REMARK'], $pos1, $pos3); // ตัดข้อความ
+                $found = true; // ตั้งค่าว่าพบข้อมูลแล้ว
+                break; // หยุดการค้นหาทันทีเมื่อเจอ
+            }
+        }
+
+        if ($found) {
+            $rest .= "ผลลัพธ์: " . $str_reserve_id . "\n\r"; // แสดงข้อความที่ตัดได้
+
+            // Query แบบปลอดภัย
+            $sql_find_reserve = "SELECT DOCINFO.DI_REF,
+            FORMAT(CAST(DOCINFO.DI_CRE_DATE AS datetime), 'dd/MM/yyyy, HH:mm:ss') AS START_BILL 
+            FROM DOCINFO
+            WHERE DOCINFO.DI_REF = :str_reserve_id"; // ใช้ :str_reserve_id เป็น placeholder
+
+            $query_reserve = $conn_sqlsvr->prepare($sql_find_reserve);
+            $query_reserve->bindParam(':str_reserve_id', $str_reserve_id, PDO::PARAM_STR); // Bind ตัวแปร
+            $query_reserve->execute();
+
+            while ($rows1 = $query_reserve->fetch(PDO::FETCH_ASSOC)) {
+                $reserve_id = $rows1['START_BILL'];
+            }
+        } else {
+            $rest .= "ไม่พบข้อมูลที่ต้องการในข้อความ" . "\n\r";
+            $reserve_id = "";
+        }
+    } else {
+        $rest .= "ข้อความ DI_REMARK ไม่มีข้อมูล" . "\n\r";
+        $reserve_id = "";
     }
 
+    /*
+        $my_file = fopen("sql_string.txt", "w") or die("Unable to open file!");
+        fwrite($my_file, $str_reserve_id . " | " . $rest);
+        fclose($my_file);
+    */
 
     $month = substr($row['DI_DATE'], 3, 2);
     $month_name = $month_arr[$month];
@@ -120,7 +161,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 
     $data .= " " . $row['DI_DATE'] . ",";
-    $data .= " " . $month_name. ",";
+    $data .= " " . $month_name . ",";
     $data .= " " . $year . ",";
 
     $data .= str_replace(",", "^", $row['AR_CODE']) . ",";

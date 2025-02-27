@@ -6,7 +6,7 @@ include('../engine/get_data_chart_dash_day2.php');
 
 ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 <canvas id="myChart" style="width:100%;max-width:800px"></canvas>

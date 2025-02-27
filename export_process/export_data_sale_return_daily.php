@@ -92,7 +92,6 @@ if(strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS) !== false){
 
     $data .= " " . ",";
     $data .= " " . ",";
-
     $data .= str_replace(",", "^", $row['WL_CODE']) . "\n";
 
 

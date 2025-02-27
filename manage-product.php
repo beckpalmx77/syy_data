@@ -54,10 +54,10 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <tr>
                                                     <th>รหัสสินค้า/วัสดุ</th>
                                                     <th>ชื่อสินค้า/วัสดุ</th>
-                                                    <th>ยอดคงเหลือ</th>
+                                                    <th>ช่องราคา</th>
+                                                    <th>ราคา</th>
                                                     <th>หน่วยนับ</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
@@ -65,10 +65,10 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <tr>
                                                     <th>รหัสสินค้า/วัสดุ</th>
                                                     <th>ชื่อสินค้า/วัสดุ</th>
-                                                    <th>ยอดคงเหลือ</th>
+                                                    <th>ช่องราคา</th>
+                                                    <th>ราคา</th>
                                                     <th>หน่วยนับ</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </tfoot>

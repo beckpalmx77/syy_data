@@ -34,7 +34,7 @@ class Html extends BaseReader
 
     private const STARTS_WITH_BOM = '/^(?:\xfe\xff|\xff\xfe|\xEF\xBB\xBF)/';
 
-    private const DECLARES_CHARSET = '/ charset=/i';
+    private const DECLARES_CHARSET = '/\\bcharset=/i';
 
     /**
      * Input encoding.
@@ -627,7 +627,10 @@ class Html extends BaseReader
     {
         foreach ($element->childNodes as $child) {
             if ($child instanceof DOMText) {
-                $domText = (string) preg_replace('/\s+/u', ' ', trim($child->nodeValue ?? ''));
+                $domText = (string) preg_replace('/\s+/', ' ', trim($child->nodeValue ?? ''));
+                if ($domText === "\u{a0}") {
+                    $domText = '';
+                }
                 if (is_string($cellContent)) {
                     //    simply append the text if the cell content is a plain text string
                     $cellContent .= $domText;
@@ -1042,7 +1045,10 @@ class Html extends BaseReader
         $name = $attributes['alt'] ?? null;
 
         $drawing = new Drawing();
-        $drawing->setPath($src);
+        $drawing->setPath($src, false);
+        if ($drawing->getPath() === '') {
+            return;
+        }
         $drawing->setWorksheet($sheet);
         $drawing->setCoordinates($column . $row);
         $drawing->setOffsetX(0);
