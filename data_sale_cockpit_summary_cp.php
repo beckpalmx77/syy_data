@@ -32,7 +32,7 @@ $STR_WHERE = "WHERE STR_TO_DATE(DI_DATE, '%d/%m/%Y')  BETWEEN '" . $doc_date_sta
 
     <script src='js/util.js'></script>
 
-    <title>สงวนออโต้คาร์</title>
+    <title>สงวนยางยนต์ชุมพร</title>
 
 </head>
 

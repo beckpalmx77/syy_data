@@ -1,12 +1,12 @@
 <?php
 include('includes/Header.php');
 if (strlen($_SESSION['alogin']) == "") {
-    header("Location: index.php");
+    header("Location: index");
 } else {
 
     include("config/connect_db.php");
 
-    $month_num = str_replace('0','',date('m'));
+    $month_num = str_replace('0', '', date('m'));
 
     $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month_num . "'";
 
@@ -16,10 +16,6 @@ if (strlen($_SESSION['alogin']) == "") {
     foreach ($MonthCurr as $row_curr) {
         $month_name = $row_curr["month_name"];
     }
-
-    //$myfile = fopen("param.txt", "w") or die("Unable to open file!");
-    //fwrite($myfile, "month_num = " . $month_num . "| month_name" . $month_name . " | " . $sql_curr_month);
-    //fclose($myfile);
 
     $sql_month = " SELECT * FROM ims_month ";
     $stmt_month = $conn->prepare($sql_month);
@@ -33,14 +29,13 @@ if (strlen($_SESSION['alogin']) == "") {
     $stmt_year->execute();
     $YearRecords = $stmt_year->fetchAll();
 
-    $sql_branch = " SELECT * FROM ims_branch  WHERE chk_cond = 'Y' ";
+    $sql_branch = " SELECT * FROM ims_branch ";
     $stmt_branch = $conn->prepare($sql_branch);
     $stmt_branch->execute();
     $BranchRecords = $stmt_branch->fetchAll();
 
 
     ?>
-
 
     <!DOCTYPE html>
     <html lang="th">
@@ -59,6 +54,8 @@ if (strlen($_SESSION['alogin']) == "") {
 
                 <!-- Container Fluid-->
                 <div class="container-fluid" id="container-wrapper">
+                    <input type="hidden" id="main_menu" value="<?php echo urldecode($_GET['m']) ?>">
+                    <input type="hidden" id="sub_menu" value="<?php echo urldecode($_GET['s']) ?>">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"><?php echo urldecode($_GET['s']) ?></h1>
                         <ol class="breadcrumb">
@@ -81,57 +78,42 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <div class="col-md-12 col-md-offset-2">
                                                 <div class="panel">
                                                     <div class="panel-body">
-
-                                                        <form id="from_data" method="post"
-                                                              action="export_process/export_data_stock_balances.php"
+                                                        <form id="myform" name="myform" action=""
                                                               enctype="multipart/form-data">
-
-                                                            <div class="modal-body">
-
-                                                                <div class="modal-body">
-                                                                    <div class="form-group row">
-
-                                                                        <div class="form-group">
-                                                                            <label for="WH_CODE">เลือกสาขา :</label>
-                                                                            <select name="WH_CODE" id="WH_CODE" class="form-control" required>
-                                                                                <option value="-">ทั้งหมด SAC-CP-BTC</option>
-                                                                                <option value="SAC">SAC</option>
-                                                                                <?php foreach ($BranchRecords as $row) { ?>
-                                                                                    <option value="<?php echo $row["WH_CODE"]; ?>">
-                                                                                        <?php echo $row["branch_name"]; ?>
-                                                                                    </option>
-                                                                                <?php } ?>
-                                                                            </select>
+                                                            <div class="row">
+                                                                <br>
+                                                                <div class="col-sm-12">
+                                                                    <div class="form-group has-success">
+                                                                        <label for="success" class="control-label">ค้นหาตามชื่อลูกค้า</label>
+                                                                        <div class="">
+                                                                            <input type="text" name="customer_name"
+                                                                                   class="form-control"
+                                                                                   id="customer_name" value="">
                                                                         </div>
-
                                                                     </div>
+
+                                                                    <div class="form-group has-success">
+                                                                        <label for="success" class="control-label">ค้นหาตามทะเบียนรถยนต์</label>
+                                                                        <div class="">
+                                                                            <input type="text" name="car_no"
+                                                                                   class="form-control"
+                                                                                   id="car_no" value="">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <br>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <button type="button" id="BtnDisplay"
+                                                                                    name="BtnDisplay"
+                                                                                    class="btn btn-primary mb-3">ค้นหา
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
                                                                 </div>
-
-
-                                                             </div>
-
-                                                            <div class="modal-footer">
-                                                                <input type="hidden" name="id" id="id"/>
-                                                                <input type="hidden" name="save_status"
-                                                                       id="save_status"/>
-                                                                <input type="hidden" name="action" id="action"
-                                                                       value=""/>
-                                                                <button type="submit" class="btn btn-success"
-                                                                        id="btnExport"> Export <i
-                                                                            class="fa fa-check"></i>
-                                                                </button>
-                                                                <!--button type="button" class="btn btn-danger"
-                                                                        id="btnClose">Close <i
-                                                                            class="fa fa-window-close"></i>
-                                                                </button-->
                                                             </div>
-
-
                                                         </form>
-
-
-                                                        <div id="result"></div>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -175,8 +157,14 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <!-- Select2 -->
+
     <script src="vendor/select2/dist/js/select2.min.js"></script>
+
+    <!-- select2 css -->
+    <link href='js/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
+
+    <!-- select2 script -->
+    <script src='js/select2/dist/js/select2.min.js'></script>
     <!-- Bootstrap Datepicker -->
     <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <!-- Bootstrap Touchspin -->
@@ -194,37 +182,62 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/MyFrameWork/framework_util.js"></script>
 
-    <script src="js/util.js"></script>
+    <script src="js/popup.js"></script>
 
     <script>
         $(document).ready(function () {
-            let today = new Date();
-            let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
-            $('#doc_date_start').val(doc_date);
-            $('#doc_date_to').val(doc_date);
+
+            $("#selCustomer").select2({
+                ajax: {
+                    url: "model/get_customer_ajax.php",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            searchTerm: params.term // search term
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+            });
         });
+
     </script>
 
     <script>
-        $(document).ready(function () {
-            $('#doc_date_start').datepicker({
-                format: "dd-mm-yyyy",
-                todayHighlight: true,
-                language: "th",
-                autoclose: true
-            });
-        });
+
+        function Onchange_AR_CODE() {
+
+            $('#AR_NAME').val($("#selCustomer").val());
+
+        }
     </script>
 
     <script>
-        $(document).ready(function () {
-            $('#doc_date_to').datepicker({
-                format: "dd-mm-yyyy",
-                todayHighlight: true,
-                language: "th",
-                autoclose: true
-            });
+
+        $("#BtnDisplay").click(function () {
+
+            if (document.getElementById('customer_name').value === "" && document.getElementById('car_no').value === "") {
+                alert("กรุณาป้อนชื่อลูกค้า หรือ หมายเลขทะเบียนรถ");
+            } else {
+                let main_menu = document.getElementById("main_menu").value;
+                let sub_menu = document.getElementById("sub_menu").value;
+                let customer_name = document.getElementById("customer_name").value;
+                let car_no = document.getElementById("car_no").value;
+                let url = "show_history_customer_service_data_detail?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
+                    + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no
+                    + '&action=QUERY';
+                window.open(url, '_blank');
+            }
+
         });
+
     </script>
 
     </body>

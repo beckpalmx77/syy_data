@@ -331,21 +331,25 @@ if (strlen($_SESSION['alogin']) == "") {
 
                 $('#car_no').val(queryString["car_no"]);
                 $('#customer_name').val(queryString["customer_name"]);
+                $('#date_option').val(queryString["date_option"]);
+                $('#doc_date_start').val(queryString["doc_date_start"]);
+                $('#doc_date_to').val(queryString["doc_date_to"]);
 
-                Load_Data_Detail(queryString["car_no"], queryString["customer_name"], queryString["sku_name"]);
+                Load_Data_Detail(queryString["car_no"], queryString["customer_name"], queryString["date_option"], queryString["doc_date_start"], queryString["doc_date_to"]);
             }
         });
     </script>
 
     <script>
-        function Load_Data_Detail(car_no, customer_name, sku_name) {
-
+        function Load_Data_Detail(car_no,customer_name,date_option,doc_date_start,doc_date_to) {
             let formData = {
                 action: "GET_HISTORY_DETAIL",
                 sub_action: "GET_MASTER",
                 car_no: car_no,
                 customer_name: customer_name,
-                sku_name: sku_name
+                date_option: date_option,
+                doc_date_start: doc_date_start,
+                doc_date_to: doc_date_to
             };
             let dataRecords = $('#TableHistoryCustomerDetailList').DataTable({
                 "paging": false,

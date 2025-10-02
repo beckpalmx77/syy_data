@@ -46,7 +46,7 @@ foreach ($BranchRecords as $rows) {
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
 
-    <title>สงวนออโต้คาร์</title>
+    <title>สงวนยางยนต์ชุมพร</title>
     <style>
 
         body {

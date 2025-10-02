@@ -14,7 +14,7 @@ include('config/lang.php');
 <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo $_SESSION['dashboard_page']?>">
         <div class="sidebar-brand-icon">
-            <img src="img/logo/Logo-01.png" width="60" height="100">
+            <img src="img/logo/Logo_01.png" width="60" height="100">
         </div>
         <div class="sidebar-brand-text mx-3">
         </div>
@@ -96,7 +96,7 @@ include('config/lang.php');
                                 </div>
                             </div>
                         </li>
-                    <?php
+                        <?php
                     }
                 }
             }

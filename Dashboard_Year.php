@@ -44,7 +44,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
+                                    สถิติ ยอดขาย ค้าปลีก SYY ปี
                                     <?php echo $year; ?>
                                 </div>
                                 <div class="card-body">
@@ -104,7 +104,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <div id="content">
                                         <div>
                                             <div class="card-header">
-                                                สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
+                                                สถิติ ยอดขาย ค้าปลีก SYY ปี
                                                 <?php echo $year; ?>
                                             </div>
                                             <div class="card-body">

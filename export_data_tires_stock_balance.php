@@ -83,7 +83,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="from_data" method="post"
-                                                              action="export_process/export_data_stock_balances.php"
+                                                              action="export_process/export_data_tires_stock_balance.php"
                                                               enctype="multipart/form-data">
 
                                                             <div class="modal-body">
@@ -95,12 +95,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <label for="WH_CODE">เลือกสาขา :</label>
                                                                             <select name="WH_CODE" id="WH_CODE" class="form-control" required>
                                                                                 <option value="-">ทั้งหมด SAC-CP-BTC</option>
-                                                                                <option value="SAC">SAC</option>
-                                                                                <?php foreach ($BranchRecords as $row) { ?>
-                                                                                    <option value="<?php echo $row["WH_CODE"]; ?>">
-                                                                                        <?php echo $row["branch_name"]; ?>
-                                                                                    </option>
-                                                                                <?php } ?>
                                                                             </select>
                                                                         </div>
 

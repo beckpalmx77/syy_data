@@ -45,7 +45,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา วันที่
+                                    สถิติ ยอดขายรายวัน ค้าปลีก SYY วันที่
                                     <?php echo date("d/m/Y"); ?>
                                 </div>
                                 <div class="card-body">
@@ -97,7 +97,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
 
                                 <div class="card-header">
-                                    สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา เดือน
+                                    สถิติ ยอดขายรายวัน ค้าปลีก SYY เดือน
                                     <?php echo $month_name . " " . date("Y"); ?>
                                 </div>
                                 <div class="card-body">

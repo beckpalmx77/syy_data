@@ -50,6 +50,22 @@ if ($_POST["action"] === 'GET_HISTORY_DETAIL') {
     ## Read value
     $car_no = $_POST['car_no'];
     $customer_name = $_POST['customer_name'];
+    $date_option = $_POST['date_option'] ?? '';
+    $doc_date_start = $_POST['doc_date_start'] ?? '';
+    $doc_date_to = $_POST['doc_date_to'] ?? '';
+    $where_date = "";
+
+    if ($date_option === 'range') {
+        if (!empty($doc_date_start)) {
+            $doc_date_start = substr($doc_date_start, 6, 4) . "/" . substr($doc_date_start, 3, 2) . "/" . substr($doc_date_start, 0, 2);
+        }
+        if (!empty($doc_date_to)) {
+            $doc_date_to = substr($doc_date_to, 6, 4) . "/" . substr($doc_date_to, 3, 2) . "/" . substr($doc_date_to, 0, 2);
+        }
+        if (!empty($doc_date_start) && !empty($doc_date_to)) {
+            $where_date = " AND DOCINFO.DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "'";
+        }
+    }
 
     $addb_phone = "";
 
@@ -97,9 +113,8 @@ TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY AND
 (DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
 (DOCINFO.DI_KEY = TRANSTKH.TRH_DI) AND 
 (TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
-(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY)
-
-ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
+(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY) " . $where_date
+        . " ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
     $stmt = $conn_sqlsvr->prepare($sql_data_select, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
     $stmt->execute();

@@ -64,7 +64,7 @@ foreach ($MonthRecords as $row) {
 
     <script src='js/util.js'></script>
 
-    <title>สงวนออโต้คาร์</title>
+    <title>สงวนยางยนต์ชุมพร</title>
 
     <script>
         function Chart_Page(branch) {

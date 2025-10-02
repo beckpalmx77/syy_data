@@ -11,18 +11,7 @@ $filename = "Data_Stock_Balance-" . $WH_CODE . "-" . date('m/d/Y H:i:s', time())
 include('../config/connect_sqlserver.php');
 include('../config/connect_db.php');
 
-$WH_NAME = "";
-$WHERE  = "";
-
-$sql_get = "SELECT * FROM ims_branch WHERE WH_CODE = '" . $WH_CODE . "'";
-$statement = $conn->query($sql_get);
-$results = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-foreach ($results as $result) {
-    $WH_NAME = $result['WH_CODE'] . "-" . $result['branch_name'] ;
-}
-
-if ($WH_CODE != "-") { $WHERE = "WHERE WH_CODE = '" . $WH_CODE . "'"; }
+$WHERE = " WHERE UTQ_NAME = 'เส้น' AND SKU_CODE LIKE '[^0-9]%'  ";
 
 $String_Sql = "SELECT 
     SM.SKU_CODE,
@@ -59,7 +48,7 @@ ORDER BY
 
 /*
 $my_file = fopen("D-AAA.txt", "w") or die("Unable to open file!");
-fwrite($my_file, $String_Sql . " / " . $WH_CODE . " - " . $WH_NAME);
+fwrite($my_file, $String_Sql);
 fclose($my_file);
 */
 

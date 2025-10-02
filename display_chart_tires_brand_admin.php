@@ -5,7 +5,7 @@
 <div class="col-md-6">
     <div class="card">
         <div class="card-header">
-            สถิติ มูลค่าการขายยาง Cockpit แต่ละยี่ห้อ
+            สถิติ มูลค่าการขายยาง แต่ละยี่ห้อ
         </div>
         <div class="card-body">
             <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
@@ -94,7 +94,7 @@
                 <div id="content">
                     <div>
                         <div class="card-header">
-                            สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
+                            สถิติ ยอดขาย ค้าปลีก SYY ปี
                             <?php echo $year; ?>
                         </div>
                         <div class="card-body">
@@ -107,7 +107,7 @@
                 <div id="content">
                     <div>
                         <div class="card-header">
-                            สถิติ ยอดขาย Cockpit แต่ละสาขา เดือน <?php echo $month_name ." ปี " . $year; ?>
+                            สถิติ ยอดขาย ค้าปลีก SYY เดือน <?php echo $month_name ." ปี " . $year; ?>
                         </div>
                         <div class="card-body">
 
@@ -120,7 +120,7 @@
                 <div id="content">
                     <div>
                         <div class="card-header">
-                            สถิติ ยอดขาย Cockpit แต่ละสาขา เดือน <?php echo $month_name ." ปี " . $year; ?>
+                            สถิติ ยอดขาย ค้าปลีก SYY เดือน <?php echo $month_name ." ปี " . $year; ?>
                         </div>
                         <div class="card-body">
 

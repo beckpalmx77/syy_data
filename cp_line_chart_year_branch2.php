@@ -19,7 +19,7 @@
 
     <script src='js/util.js'></script>
 
-    <title>สงวนออโต้คาร์</title>
+    <title>สงวนยางยนต์ชุมพร</title>
 
 </head>
 

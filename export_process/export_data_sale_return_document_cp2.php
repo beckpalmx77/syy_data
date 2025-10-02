@@ -27,11 +27,15 @@ switch ($branch) {
     case "CP-BB":
         $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
         break;
+    case "BTC":
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CCS6','CCS7','DDS5','IC5','IC6','IIS5','IIS6','IV3')) ";
+        break;
     case "ALL":
         $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4',
         'CS.8','CS.9','IC.3','IC.4','IS.3','IS.4','S.5','S.6',
         'CS.6','CS.7','IC.1','IC.2','IS.1','IS.2','S.1','S.2',
-        'CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
+        'CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4',
+        'CCS6','CCS7','DDS5','IC5','IC6','IIS5','IIS6','IV3')) ";
         break;
 }
 

@@ -1,12 +1,12 @@
 <?php
 include('includes/Header.php');
 if (strlen($_SESSION['alogin']) == "") {
-    header("Location: index.php");
+    header("Location: index");
 } else {
 
     include("config/connect_db.php");
 
-    $month_num = str_replace('0','',date('m'));
+    $month_num = str_replace('0', '', date('m'));
 
     $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month_num . "'";
 
@@ -33,14 +33,7 @@ if (strlen($_SESSION['alogin']) == "") {
     $stmt_year->execute();
     $YearRecords = $stmt_year->fetchAll();
 
-    $sql_branch = " SELECT * FROM ims_branch  WHERE chk_cond = 'Y' ";
-    $stmt_branch = $conn->prepare($sql_branch);
-    $stmt_branch->execute();
-    $BranchRecords = $stmt_branch->fetchAll();
-
-
     ?>
-
 
     <!DOCTYPE html>
     <html lang="th">
@@ -82,56 +75,43 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="panel">
                                                     <div class="panel-body">
 
-                                                        <form id="from_data" method="post"
-                                                              action="export_process/export_data_stock_balances.php"
-                                                              enctype="multipart/form-data">
+                                                        <form id="myform" name="myform" method="post">
 
-                                                            <div class="modal-body">
-
-                                                                <div class="modal-body">
-                                                                    <div class="form-group row">
-
-                                                                        <div class="form-group">
-                                                                            <label for="WH_CODE">เลือกสาขา :</label>
-                                                                            <select name="WH_CODE" id="WH_CODE" class="form-control" required>
-                                                                                <option value="-">ทั้งหมด SAC-CP-BTC</option>
-                                                                                <option value="SAC">SAC</option>
-                                                                                <?php foreach ($BranchRecords as $row) { ?>
-                                                                                    <option value="<?php echo $row["WH_CODE"]; ?>">
-                                                                                        <?php echo $row["branch_name"]; ?>
-                                                                                    </option>
-                                                                                <?php } ?>
-                                                                            </select>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <label for="month">เลือกเดือน :</label>
+                                                                    <select name="month" id="month" class="form-control"
+                                                                            required>
+                                                                        <option value="<?php echo $month_num; ?>"
+                                                                                selected><?php echo $month_name; ?></option>
+                                                                        <?php foreach ($MonthRecords as $row) { ?>
+                                                                            <option value="<?php echo $row["month"]; ?>">
+                                                                                <?php echo $row["month_name"]; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                    <label for="year">เลือกปี :</label>
+                                                                    <select name="year" id="year" class="form-control"
+                                                                            required>
+                                                                        <?php foreach ($YearRecords as $row) { ?>
+                                                                            <option value="<?php echo $row["DI_YEAR"]; ?>">
+                                                                                <?php echo $row["DI_YEAR"]; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                    <br>
+                                                                    <div class="row">
+                                                                        <div class="col-1">
+                                                                            <button type="button" id="BtnSale"
+                                                                                    name="BtnSale"
+                                                                                    class="btn btn-success"> Export <i class="fa fa-check"></i>
+                                                                            </button>
                                                                         </div>
-
                                                                     </div>
+
                                                                 </div>
-
-
-                                                             </div>
-
-                                                            <div class="modal-footer">
-                                                                <input type="hidden" name="id" id="id"/>
-                                                                <input type="hidden" name="save_status"
-                                                                       id="save_status"/>
-                                                                <input type="hidden" name="action" id="action"
-                                                                       value=""/>
-                                                                <button type="submit" class="btn btn-success"
-                                                                        id="btnExport"> Export <i
-                                                                            class="fa fa-check"></i>
-                                                                </button>
-                                                                <!--button type="button" class="btn btn-danger"
-                                                                        id="btnClose">Close <i
-                                                                            class="fa fa-window-close"></i>
-                                                                </button-->
                                                             </div>
-
-
                                                         </form>
-
-
-                                                        <div id="result"></div>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,37 +174,15 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/MyFrameWork/framework_util.js"></script>
 
-    <script src="js/util.js"></script>
-
     <script>
-        $(document).ready(function () {
-            let today = new Date();
-            let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
-            $('#doc_date_start').val(doc_date);
-            $('#doc_date_to').val(doc_date);
-        });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            $('#doc_date_start').datepicker({
-                format: "dd-mm-yyyy",
-                todayHighlight: true,
-                language: "th",
-                autoclose: true
-            });
+        $("#BtnSale").click(function () {
+            document.forms['myform'].action = 'export_process/export_data_sale_product_sac_process';
+            //document.forms['myform'].target = '_blank';
+            document.forms['myform'].submit();
+            return true;
         });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            $('#doc_date_to').datepicker({
-                format: "dd-mm-yyyy",
-                todayHighlight: true,
-                language: "th",
-                autoclose: true
-            });
-        });
     </script>
 
     </body>
