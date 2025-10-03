@@ -63,8 +63,9 @@ $in_clause = "'" . implode("', '", $all_docs) . "'";
 // 3. สร้างเงื่อนไข SQL ทั้งหมด
 $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in (" . $in_clause . ")) ";
 
-$query_year = " AND DI_DATE BETWEEN '2017/01/01' AND '2023/07/31'";
-//$query_year = " AND DI_DATE BETWEEN '2025/10/01' AND '" . date("Y/m/d") . "'";
+//$query_year = " AND DI_DATE BETWEEN '2017/01/01' AND '2023/07/31'";
+
+$query_year = " AND DI_DATE BETWEEN '2025/01/01' AND '" . date("Y/m/d") . "'";
 
 //$query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
 
