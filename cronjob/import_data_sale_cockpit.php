@@ -26,7 +26,7 @@ $str_group4 = array("601-BS01","601-DS01","601-FK01","601-GY01","601-HK01","601-
 //$query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4','CS.8','CS.9','IC.3','IC.4','IS.3','IS.4','S.5','S.6','CS.6','CS.7','IC.1','IC.2','IS.1','IS.2','S.1','S.2','CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
 
 // 1. รวม Array ทั้งหมดเข้าด้วยกัน
-$all_docs = array_merge($str_doc1, $str_doc2, $str_doc3, $str_doc4);
+$all_docs = array_merge($str_doc1, $str_doc2, $str_doc3, $str_doc4, $str_doc5, $str_doc6, $str_doc7, $str_doc8);
 
 // 2. สร้าง String สำหรับใส่ในเงื่อนไข IN (...)
 // โดยใส่เครื่องหมาย ' (single quote) คร่อมแต่ละค่า และคั่นด้วย , (comma)
@@ -76,19 +76,35 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     $branch = "";
 
     if (in_array($DT_DOCCODE, $str_doc1)) {
-        $branch = "CP-340";
+        $branch = "SYY01";
     }
 
     if (in_array($DT_DOCCODE, $str_doc2)) {
-        $branch = "CP-BY";
+        $branch = "SYY02";
     }
 
     if (in_array($DT_DOCCODE, $str_doc3)) {
-        $branch = "CP-RP";
+        $branch = "SYY03";
     }
 
     if (in_array($DT_DOCCODE, $str_doc4)) {
-        $branch = "CP-BB";
+        $branch = "SYY04";
+    }
+
+    if (in_array($DT_DOCCODE, $str_doc5)) {
+        $branch = "SYY05";
+    }
+
+    if (in_array($DT_DOCCODE, $str_doc6)) {
+        $branch = "SYY06";
+    }
+
+    if (in_array($DT_DOCCODE, $str_doc7)) {
+        $branch = "SYY07";
+    }
+
+    if (in_array($DT_DOCCODE, $str_doc8)) {
+        $branch = "SYY08";
     }
 
     echo "[ " . $DT_DOCCODE . " | " . $branch . " ]" . "\n\r";
