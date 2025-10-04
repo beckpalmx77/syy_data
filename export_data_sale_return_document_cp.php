@@ -90,13 +90,42 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                 class="form-control"
                                                                                 data-live-search="true"
                                                                                 title="Please select">
-                                                                            <option>CP-340</option>
-                                                                            <option>CP-BY</option>
-                                                                            <option>CP-RP</option>
-                                                                            <option>CP-BB</option>
-                                                                            <option>ALL</option>
+
+                                                                            <?php
+                                                                            // *********************************************************
+                                                                            // *** สมมติว่าตัวแปร $conn คือ PDO connection ที่ใช้งานอยู่ ***
+                                                                            // *********************************************************
+
+                                                                            try {
+                                                                                // 1. ดึงข้อมูลสาขาจากตาราง ims_branch
+                                                                                $sql_get_branches = "SELECT branch, branch_name FROM ims_branch ORDER BY branch_name ASC";
+                                                                                $stmt_branches = $conn->query($sql_get_branches);
+                                                                                $branches = $stmt_branches->fetchAll(PDO::FETCH_ASSOC);
+
+                                                                                // 2. วนลูปเพื่อสร้าง <option> tags
+                                                                                foreach ($branches as $br) {
+                                                                                    // ใช้ branch เป็นค่า value และใช้ branch_name เป็นข้อความที่แสดง
+                                                                                    // หากต้องการให้แสดงทั้งรหัสสาขาและชื่อสาขา ให้เปลี่ยนเป็น:
+                                                                                    // $display_text = htmlspecialchars($br['branch'] . ' - ' . $br['branch_name']);
+
+                                                                                    $branch_code = htmlspecialchars($br['branch']);
+                                                                                    $display_name = htmlspecialchars($br['branch_name']);
+
+                                                                                    echo '<option value="' . $branch_code . '">' . $display_name . ' (' . $branch_code . ')</option>';
+                                                                                }
+
+                                                                            } catch (PDOException $e) {
+                                                                                // การจัดการข้อผิดพลาดในการเชื่อมต่อ/Query
+                                                                                // ในโค้ดจริง คุณควรจัดการข้อผิดพลาดอย่างเหมาะสม
+                                                                                echo '<option value="">** Error: Cannot load branches **</option>';
+                                                                                // error_log("Database error: " . $e->getMessage()); // บันทึก error ใน log
+                                                                            }
+                                                                            ?>
+
+                                                                            <option value="ALL">ALL</option>
                                                                         </select>
                                                                     </div>
+                                                                    
                                                                 </div>
                                                             </div>
 
