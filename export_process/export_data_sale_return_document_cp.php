@@ -66,11 +66,11 @@ $year = substr($_POST['doc_date_to'], 6, 4);
 $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
     . $query_daily_cond_ext
     . $select_query_daily_order;
-
-//$my_file = fopen("D-CP.txt", "w") or die("Unable to open file!");
-//fwrite($my_file, $String_Sql);
-//fclose($my_file);
-
+/*
+$my_file = fopen("a-retail.txt", "w") or die("Unable to open file!");
+fwrite($my_file, $String_Sql);
+fclose($my_file);
+*/
 $data = "วันที่,เดือน,ปี,รหัสลูกค้า,รหัสสินค้า,รายละเอียดสินค้า,รายละเอียด,ยี่ห้อ,INV ลูกค้า,ชื่อลูกค้า,ผู้แทนขาย,จำนวน,ราคาขาย,ส่วนลดรวม,ส่วนลดต่อเส้น,มูลค่ารวม,ภาษี 7%,มูลค่ารวมภาษี,คลัง\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
