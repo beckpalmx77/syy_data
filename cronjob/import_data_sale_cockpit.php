@@ -9,6 +9,7 @@ include("../config/connect_db.php");
 include('../cond_file/doc_info_sale_daily_cp.php');
 include('../util/month_util.php');
 
+/*
 $str_doc1 = array("CS01", "CS09", "CV01", "CV09", "DS01", "DS08", "IV01", "IV08");
 $str_doc2 = array("CS08", "CV07", "DS07", "IV07");
 $str_doc3 = array("CS02", "CV02", "DS02", "IV02");
@@ -17,6 +18,17 @@ $str_doc5 = array("CS04", "CV04", "DS04", "IV04");
 $str_doc6 = array("CS05", "CV05", "DS05", "IV05");
 $str_doc7 = array("CS14", "CV014", "DS12", "IV12");
 $str_doc8 = array("CS15", "CV15", "DS13", "IV13");
+*/
+
+$str_doc1 = array("CS01", "CS09", "CV01", "CV09", "DS01", "DS08", "IV01", "IV08", "ISC1", "ISC7", "ISC8", "ICO1", "ICO8", "IS1", "IS7", "ISO1", "ISO7", "IC10");
+$str_doc2 = array("CS08", "CV07", "DS07", "IV07", "ISC6", "ICO6", "IS6", "ISO6");
+$str_doc3 = array("CS02", "CV02", "DS02", "IV02", "ICO2", "IS2", "ISO2", "ISC2");
+$str_doc4 = array("CS03", "CV03", "DS03", "IV03", "ISC3", "ICO3", "IS3", "ISO3");
+$str_doc5 = array("CS04", "CV04", "DS04", "IV04", "ISC4", "ICO4", "IS4", "ISO4");
+$str_doc6 = array("CS05", "CV05", "DS05", "IV05", "ISC5", "ICO5", "IS5", "ISO5");
+$str_doc7 = array("CS14", "CV014", "DS12", "IV12", "ICO9", "ISC9", "IS8", "ISO8");
+$str_doc8 = array("CS15", "CV15", "DS13", "IV13", "IC11", "IS10", "IS9", "ISO9");
+
 
 $str_group1 = array("201-DT01", "027-TOYO01", "020-MX01", "201-BS01", "201-LLIT01", "201-ML01",
     "025-T%01", "101-LLIT01", "201-DL01", "201-LEAO01", "023-NT01", "201-SIM01",
