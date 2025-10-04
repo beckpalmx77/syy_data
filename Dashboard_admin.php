@@ -83,8 +83,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <?php
                                         $date = date("d/m/Y");
                                         $total = 0;
-                                        $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
-                                                      FROM ims_product_sale_cockpit 
+                                        $sql_daily = "SELECT BRANCH,branch_name,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+                                                      FROM v_ims_product_sale_cockpit 
                                                       WHERE DI_DATE = '" . $date . "'
                                                       AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
                                                       GROUP BY  BRANCH
@@ -98,7 +98,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         as $row_daily) { ?>
 
                                         <tr>
-                                            <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
+                                            <td><?php echo htmlentities($row_daily['branch_name']); ?></td>
                                             <td>
                                                 <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
                                             </td>
@@ -138,8 +138,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <?php
 
                                         $total = 0;
-                                        $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
-                                                      FROM ims_product_sale_cockpit 
+                                        $sql_daily = "SELECT BRANCH,branch_name,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+                                                      FROM v_ims_product_sale_cockpit 
                                                       WHERE DI_MONTH = '" . date("n") . "'
                                                       AND DI_YEAR = '" . date("Y") . "'
                                                       AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
@@ -149,11 +149,13 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $statement_daily = $conn->query($sql_daily);
                                         $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results_daily as $row_daily) {
+                                        foreach ($results_daily
+
+                                        as $row_daily) {
 
                                         $sql_target = " SELECT * FROM ims_sale_target WHERE target_month = '" . date("n") . "' AND target_year = '" . date("Y") . "'"
-                                        . " AND sale_id = '" . $row_daily['BRANCH'] . "'"
-                                        . " ORDER BY target_year DESC , target_month DESC , sale_id ";
+                                            . " AND sale_id = '" . $row_daily['branch_name'] . "'"
+                                            . " ORDER BY target_year DESC , target_month DESC , sale_id ";
 
                                         /*
                                         $sql_target_s .= "\n\r" . $sql_target . " | " . $sale_point ;
@@ -179,7 +181,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         ?>
 
                                         <tr>
-                                            <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
+                                            <td><?php echo htmlentities($row_daily['branch_name']); ?></td>
                                             <td>
                                                 <?php $percent_sale = ($row_daily['TRD_G_KEYIN'] / $sale_point) * 100;
                                                 $total_remain = $sale_point - $row_daily['TRD_G_KEYIN'];
@@ -260,30 +262,6 @@ if (strlen($_SESSION['alogin']) == "") {
         myVar = setInterval(function () {
             window.location.reload(true);
         }, 100000);
-    </script>
-
-
-    <script>
-
-        $(document).ready(function () {
-            /*
-
-            GET_DATA("ims_order_master", "1");
-            GET_DATA("ims_product", "2");
-            GET_DATA("ims_customer_ar", "3");
-            GET_DATA("ims_supplier", "4");
-
-            setInterval(function () {
-                GET_DATA("ims_order_master", "1");
-                GET_DATA("ims_product", "2");
-                GET_DATA("ims_customer_ar", "3");
-                GET_DATA("ims_supplier", "4");
-            }, 3000);
-
-             */
-        });
-
-
     </script>
 
     <script>

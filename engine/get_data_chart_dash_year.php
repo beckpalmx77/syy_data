@@ -1,89 +1,74 @@
 <?php
-//$year = '2022';
-$label1 = '';
-$label2 = '';
-$label3 = '';
-$label4 = '';
-$data1 = '';
-$data2 = '';
-$data3 = '';
-$data4 = '';
+// NOTE: $conn (PDO connection) และ $year ถูกสมมติว่ามีการกำหนดค่าไว้แล้ว
 
-for ($x = 0; $x <= 3; $x++) {
+// 1. ตัวแปร Array สำหรับเก็บผลลัพธ์ทั้งหมด
+$labels = [];      // สำหรับเก็บชื่อสาขา (branch_name)
+$data_arrays = []; // สำหรับเก็บข้อมูลยอดขาย (TRD_G_KEYIN) ในรูปแบบ string array
 
-    switch ($x) {
-        case 0:
-            $branch = "CP-340";
-            break;
-        case 1:
-            $branch = "CP-BY";
-            break;
-        case 2:
-            $branch = "CP-BB";
-            break;
-        case 3:
-            $branch = "CP-RP";
-            break;
-    }
+// 2. ดึงข้อมูลสาขา (branch) และชื่อสาขา (branch_name) ทั้งหมดจากตาราง ims_branch
+$sql_branches = "SELECT branch, branch_name FROM ims_branch ORDER BY branch";
+$stmt_branches = $conn->query($sql_branches);
+$branches = $stmt_branches->fetchAll(PDO::FETCH_ASSOC);
 
-    $str_return = "[";
+// 3. วนลูปตามจำนวนสาขาที่ดึงมาได้
+foreach ($branches as $br) {
+    $current_branch_code = $br['branch'];
+    $current_branch_name = $br['branch_name'];
 
-    $sql_get = " SELECT BRANCH,DI_YEAR,DI_MONTH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
- FROM ims_product_sale_cockpit 
- WHERE DI_YEAR = '" . $year . "'
- AND BRANCH = '" . $branch . "'
- AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
- GROUP BY DI_MONTH,BRANCH  
- ORDER BY BRANCH,CAST(DI_MONTH AS UNSIGNED) ";
+    // เก็บชื่อสาขาไว้ใน array สำหรับใช้เป็น label
+    $labels[] = $current_branch_name;
 
-    $statement = $conn->query($sql_get);
-    $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+    // 4. SQL Query เพื่อดึงยอดขายรายเดือนของสาขาปัจจุบัน
+    // ******************************************************************************
+    // * ข้อควรทราบ: แก้ไขตรรกะ WHERE clause จาก OR เป็น NOT IN เพื่อกรองเอกสารออกอย่างถูกต้อง
+    // ******************************************************************************
+    $sql_get = "
+        SELECT 
+            DI_MONTH,
+            SUM(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) AS TRD_G_KEYIN
+        FROM 
+            ims_product_sale_cockpit 
+        WHERE 
+            DI_YEAR = :year 
+            AND BRANCH = :branch 
+            AND ICCAT_CODE <> '6SAC08'
+            AND DT_DOCCODE NOT IN ('IS', 'IIS', 'IC') 
+        GROUP BY 
+            DI_MONTH
+        ORDER BY 
+            CAST(DI_MONTH AS UNSIGNED)
+    ";
 
+    // ใช้ Prepared Statement เพื่อความปลอดภัย
+    $stmt_get = $conn->prepare($sql_get);
+    $stmt_get->execute([
+        ':year' => $year,
+        ':branch' => $current_branch_code
+    ]);
+    $results = $stmt_get->fetchAll(PDO::FETCH_ASSOC);
 
+    // 5. จัดรูปแบบข้อมูลยอดขายให้เป็น String Array (e.g., "[100.00, 200.00, ...]")
+    $monthly_data_values = [];
     foreach ($results as $result) {
-        if ($result['DI_MONTH'] == 12) {
-            $str_return .= $result['TRD_G_KEYIN'];
-        } else {
-            $str_return .= $result['TRD_G_KEYIN'] . ",";
-        }
+        $monthly_data_values[] = $result['TRD_G_KEYIN'];
     }
 
-    $str_return .= "]";
+    // ใช้ implode() เพื่อรวมค่าทั้งหมดเข้าด้วยกัน
+    $str_return = "[" . implode(",", $monthly_data_values) . "]";
 
-    switch ($x) {
-        case 0:
-            $label1 = "CP-340";
-            $data1 = $str_return;
-            break;
-        case 1:
-            $label2 = "CP-BY";
-            $data2 = $str_return;
-            break;
-        case 2:
-            $label3 = "CP-BB";
-            $data3 = $str_return;
-            break;
-        case 3:
-            $label4 = "CP-RP";
-            $data4 = $str_return;
-            break;
-    }
-
+    // 6. เก็บ String Array ของยอดขายไว้ใน array หลัก
+    $data_arrays[] = $str_return;
 }
 
-/*
-echo $label1 . " ";
-echo $label2 . " ";
-echo $label3 . " ";
-echo $label4 . " ";
-
-*/
+// *** ผลลัพธ์สุดท้ายจะอยู่ในตัวแปร $labels และ $data_arrays ***
+// $labels      : Array ของ branch_name ทั้งหมด
+// $data_arrays : Array ของ String Array ยอดขายรายเดือนของแต่ละสาขา
 
 /*
-echo $data1 . "<br>";
-echo $data2 . "<br>";
-echo $data3 . "<br>";
-echo $data4 . "<br>";
-echo $year  .  "<br>";
+ตัวอย่างการแสดงผลลัพธ์ (ตามจำนวนสาขาที่ดึงมาได้)
+foreach ($labels as $index => $label) {
+    echo "Label " . ($index + 1) . ": " . $label . "<br>";
+    echo "Data " . ($index + 1) . ": " . $data_arrays[$index] . "<br>";
+}
 */
-
+?>

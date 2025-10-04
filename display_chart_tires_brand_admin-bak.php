@@ -90,6 +90,50 @@
                 <?php echo "รวม : ยางทั้งหมด  = " . number_format($total, 2) . " เส้น จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?>
             </table>
 
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <div>
+                        <div class="card-header">
+                            สถิติ ยอดขาย ค้าปลีก SYY ปี
+                            <?php echo $year; ?>
+                        </div>
+                        <div class="card-body">
+                            <?php include('cp_bar_chart_dash_by_year.php'); ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <div>
+                        <div class="card-header">
+                            สถิติ ยอดขาย ค้าปลีก SYY เดือน <?php echo $month_name ." ปี " . $year; ?>
+                        </div>
+                        <div class="card-body">
+
+                            <?php include('cp_bar_chart_dash_day.php'); ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <div>
+                        <div class="card-header">
+                            สถิติ ยอดขาย ค้าปลีก SYY เดือน <?php echo $month_name ." ปี " . $year; ?>
+                        </div>
+                        <div class="card-body">
+
+                            <?php include('cp_bar_chart_dash_day-2.php'); ?>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
         </div>
     </div>
 </div>

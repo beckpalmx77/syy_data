@@ -11,8 +11,8 @@ $year = date("Y");
 //fclose($myfile);
 
 $sql_get = "
- SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
- FROM ims_product_sale_cockpit 
+ SELECT BRANCH,branch_name,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+ FROM v_ims_product_sale_cockpit 
  WHERE DI_YEAR = '" . $year .  "' AND DI_MONTH = '" . $month .  "'
  AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
  GROUP BY  BRANCH
@@ -29,7 +29,7 @@ $statement = $conn->query($sql_get);
 $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($results as $result) {
-    $return_arr[] = array("BRANCH" => $result['BRANCH'],
+    $return_arr[] = array("BRANCH" => $result['branch_name'],
         "TRD_G_KEYIN" => $result['TRD_G_KEYIN']);
 
 }
