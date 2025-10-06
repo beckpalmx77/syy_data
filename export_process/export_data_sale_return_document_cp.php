@@ -18,24 +18,65 @@ $DT_DOCCODE_MINUS1 = "IS";
 $DT_DOCCODE_MINUS2 = "IIS";
 $DT_DOCCODE_MINUS3 = "IC";
 
+// Array ข้อมูลที่คุณให้มา
+$str_doc1 = array("CS01", "CS09", "CV01", "CV09", "DS01", "DS08", "IV01", "IV08", "ISC1", "ISC7", "ISC8", "ICO1", "ICO8", "IS1", "IS7", "ISO1", "ISO7", "IC10");
+$str_doc2 = array("CS08", "CV07", "DS07", "IV07", "ISC6", "ICO6", "IS6", "ISO6");
+$str_doc3 = array("CS02", "CV02", "DS02", "IV02", "ICO2", "IS2", "ISO2", "ISC2");
+$str_doc4 = array("CS03", "CV03", "DS03", "IV03", "ISC3", "ICO3", "IS3", "ISO3");
+$str_doc5 = array("CS04", "CV04", "DS04", "IV04", "ISC4", "ICO4", "IS4", "ISO4");
+$str_doc6 = array("CS05", "CV05", "DS05", "IV05", "ISC5", "ICO5", "IS5", "ISO5");
+$str_doc7 = array("CS14", "CV014", "DS12", "IV12", "ICO9", "ISC9", "IS8", "ISO8");
+$str_doc8 = array("CS15", "CV15", "DS13", "IV13", "IC11", "IS10", "IS9", "ISO9");
+
+// แปลง Array ให้เป็น String สำหรับ SQL IN clause
+$doc1_str = implode("','", $str_doc1);
+$doc2_str = implode("','", $str_doc2);
+$doc3_str = implode("','", $str_doc3);
+$doc4_str = implode("','", $str_doc4);
+$doc5_str = implode("','", $str_doc5);
+$doc6_str = implode("','", $str_doc6);
+$doc7_str = implode("','", $str_doc7);
+$doc8_str = implode("','", $str_doc8);
+
+// สำหรับกรณี 'ALL' ให้รวมทั้งหมด
+$all_docs = array_merge($str_doc1, $str_doc2, $str_doc3, $str_doc4); // ดูจากตัวอย่างเดิมน่าจะรวมแค่ 4 ตัวแรก
+$all_docs_str = implode("','", $all_docs);
+
 switch ($branch) {
-    case "CP-340":
-        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4')) ";
+    case "SYY01":
+        // ใช้ข้อมูลจาก $str_doc1
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$doc1_str}')) ";
         break;
-    case "CP-BY":
-        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CS.8','CS.9','IC.3','IC.4','IS.3','IS.4','S.5','S.6')) ";
+    case "SYY02":
+        // ใช้ข้อมูลจาก $str_doc2
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$doc2_str}')) ";
         break;
-    case "CP-RP":
-        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CS.6','CS.7','IC.1','IC.2','IS.1','IS.2','S.1','S.2')) ";
+    case "SYY03":
+        // ใช้ข้อมูลจาก $str_doc3
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$doc3_str}')) ";
         break;
-    case "CP-BB":
-        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
+    case "SYY04":
+        // ใช้ข้อมูลจาก $str_doc4
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$doc4_str}')) ";
+        break;
+    case "SYY05":
+        // ใช้ข้อมูลจาก $str_doc5
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$doc5_str}')) ";
+        break;
+    case "SYY06":
+        // ใช้ข้อมูลจาก $str_doc6
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$doc6_str}')) ";
+        break;
+    case "SYY07":
+        // ใช้ข้อมูลจาก $str_doc7
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$doc7_str}')) ";
+        break;
+    case "SYY08":
+        // ใช้ข้อมูลจาก $str_doc8
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$doc8_str}')) ";
         break;
     case "ALL":
-        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4',
-        'CS.8','CS.9','IC.3','IC.4','IS.3','IS.4','S.5','S.6',
-        'CS.6','CS.7','IC.1','IC.2','IS.1','IS.2','S.1','S.2',
-        'CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('{$all_docs_str}')) ";
         break;
 }
 
@@ -66,11 +107,13 @@ $year = substr($_POST['doc_date_to'], 6, 4);
 $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
     . $query_daily_cond_ext
     . $select_query_daily_order;
+
 /*
 $my_file = fopen("a-retail.txt", "w") or die("Unable to open file!");
 fwrite($my_file, $String_Sql);
 fclose($my_file);
 */
+
 $data = "วันที่,เดือน,ปี,รหัสลูกค้า,รหัสสินค้า,รายละเอียดสินค้า,รายละเอียด,ยี่ห้อ,INV ลูกค้า,ชื่อลูกค้า,ผู้แทนขาย,จำนวน,ราคาขาย,ส่วนลดรวม,ส่วนลดต่อเส้น,มูลค่ารวม,ภาษี 7%,มูลค่ารวมภาษี,คลัง\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
@@ -79,7 +122,7 @@ $query->execute();
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 
-    if ($row['ICCAT_CODE']!=="6SAC08") {
+    if ($row['SKU_CODE']!=="9002") {
 
         $month = substr($row['DI_DATE'], 3, 2);
         $month_name = $month_arr[$month];
