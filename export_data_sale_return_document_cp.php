@@ -98,7 +98,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                             try {
                                                                                 // 1. ดึงข้อมูลสาขาจากตาราง ims_branch
-                                                                                $sql_get_branches = "SELECT branch, branch_name FROM ims_branch ORDER BY branch ASC";
+                                                                                $sql_get_branches = "SELECT branch, branch_name FROM ims_branch WHERE chk_cond = 'Y' ORDER BY branch ASC";
                                                                                 $stmt_branches = $conn->query($sql_get_branches);
                                                                                 $branches = $stmt_branches->fetchAll(PDO::FETCH_ASSOC);
 
