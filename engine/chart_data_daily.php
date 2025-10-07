@@ -21,6 +21,12 @@ $sql_get = "
  ORDER BY STR_TO_DATE(DI_DATE,'%d/%m/%Y')
 ";
 
+/*
+$myfile = fopen("a-param.txt", "w") or die("Unable to open file!");
+fwrite($myfile, $month  . "| Year = " . $year . "| Branch" . $branch . " | " . $sql_get);
+fclose($myfile);
+*/
+
 $return_arr = array();
 
 $statement = $conn->query($sql_get);
