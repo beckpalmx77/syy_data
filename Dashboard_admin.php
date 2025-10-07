@@ -91,6 +91,12 @@ if (strlen($_SESSION['alogin']) == "") {
                                                       ORDER BY BRANCH";
 
                                         $statement_daily = $conn->query($sql_daily);
+/*
+                                        $myfile = fopen("a-param.txt", "w") or die("Unable to open file!");
+                                        fwrite($myfile, $sql_daily);
+                                        fclose($myfile);
+*/
+
                                         $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
 
                                         foreach ($results_daily

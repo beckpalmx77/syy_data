@@ -90,7 +90,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                 class="form-control"
                                                                                 data-live-search="true"
                                                                                 title="Please select">
-
                                                                             <?php
                                                                             // *********************************************************
                                                                             // *** สมมติว่าตัวแปร $conn คือ PDO connection ที่ใช้งานอยู่ ***
@@ -122,7 +121,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             }
                                                                             ?>
 
-                                                                            <!--option value="ALL">ALL</option-->
                                                                         </select>
                                                                     </div>
 
