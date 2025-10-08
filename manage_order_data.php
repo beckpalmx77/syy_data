@@ -137,7 +137,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 </button>
                                                 <button type="button" class="btn btn-danger"
                                                         id="btnClose">Close <i
-                                                            class="fa fa-window-close"></i>
+                                                            class="fa fa-times"></i>
                                                 </button>
                                             </div>
                                         </form>
@@ -271,7 +271,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             </span>
                                                             <button type="button" class="btn btn-danger"
                                                                     data-dismiss="modal">Close <i
-                                                                        class="fa fa-window-close"></i>
+                                                                        class="fa fa-times"></i>
                                                             </button>
                                                         </div>
                                                     </form>
