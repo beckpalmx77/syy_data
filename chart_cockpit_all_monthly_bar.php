@@ -86,7 +86,7 @@ foreach ($MonthRecords as $row) {
             $date = date("d/m/Y");
             $total = 0;
             $sql_total = " SELECT *
- FROM ims_report_product_sale_summary 
+ FROM v_ims_report_product_sale_summary 
  WHERE DI_YEAR = '" . $year . "' 
  AND DI_MONTH = '" . $month . "'
  ORDER BY BRANCH";
@@ -99,7 +99,7 @@ foreach ($MonthRecords as $row) {
             as $row_total) { ?>
 
             <tr>
-                <td><?php echo htmlentities($row_total['BRANCH']); ?></td>
+                <td><?php echo htmlentities($row_total['branch_name']); ?></td>
                 <td align="right">
                     <p class="number"><?php echo htmlentities(number_format($row_total['tires_total_amt'], 2)); ?></p>
                 </td>
