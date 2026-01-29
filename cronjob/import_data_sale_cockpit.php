@@ -72,6 +72,8 @@ $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in (" . $in_clause . ")) ";
 
 //$query_year = " AND DI_DATE BETWEEN '2025/01/01' AND '" . date("Y/m/d") . "'";
 
+//$query_year = " AND DI_DATE BETWEEN '2025/01/27' AND '" . date("Y/m/d") . "'";
+
 $query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
 
 echo "Today is " . date("Y/m/d") . "\n\r" ;
