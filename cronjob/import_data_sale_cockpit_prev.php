@@ -3,7 +3,7 @@
 ini_set('display_errors', 1);
 error_reporting(~0);
 
-include("../config/connect_sqlserver.php");
+include("../config/connect_sqlserver_prev.php");
 include("../config/connect_db.php");
 
 include('../cond_file/doc_info_sale_daily_cp.php');
